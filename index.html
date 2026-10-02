@@ -2,3153 +2,3864 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Console Factory 1972-2026</title>
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+>
+
+<meta name="theme-color" content="#111827">
+
+<title>IA-Objetos</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.22.0/dist/tf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@2.1.1"></script>
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 
 <style>
-*{box-sizing:border-box}
 
-body{
- margin:0;
- background:#070b12;
- color:#edf4ff;
- font-family:Arial,Helvetica,sans-serif
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
-header{
- padding:18px;
- background:linear-gradient(135deg,#111d32,#0b101b);
- border-bottom:1px solid #263650;
- position:sticky;
- top:0;
- z-index:10
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Arial,
+    sans-serif;
+  background: #f5f7fb;
+  color: #202124;
 }
 
-h1,h2,h3{margin-top:0}
-
-.top{
- max-width:1250px;
- margin:auto;
- display:flex;
- justify-content:space-between;
- align-items:center;
- gap:15px;
- flex-wrap:wrap
+body {
+  overflow-x: hidden;
 }
 
-.stats{
- display:flex;
- gap:8px;
- flex-wrap:wrap
+button,
+input {
+  font-family: inherit;
 }
 
-.stat{
- min-width:90px;
- background:#101a2a;
- border:1px solid #293b58;
- padding:9px;
- border-radius:10px;
- text-align:center
+button {
+  cursor: pointer;
 }
 
-.stat b{
- display:block;
- font-size:18px
+.hidden {
+  display: none !important;
 }
 
-.stat span{
- color:#91a0b8;
- font-size:11px
+/* =====================================================
+   DESKTOP
+===================================================== */
+
+#desktop {
+  min-height: 100vh;
 }
 
-.timeline{
- max-width:1250px;
- margin:10px auto 0;
- height:8px;
- background:#05080d;
- border-radius:20px;
- overflow:hidden
+.desktop-header {
+  height: 65px;
+  background: white;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
 }
 
-.timeline div{
- height:100%;
- width:0;
- background:linear-gradient(90deg,#4da3ff,#bd7cff);
- transition:.3s
+.logo {
+  font-size: 22px;
+  font-weight: 800;
 }
 
-nav{
- max-width:1250px;
- margin:12px auto;
- display:flex;
- gap:7px;
- overflow-x:auto;
- padding:0 10px
+.logo span {
+  color: #4285f4;
 }
 
-button{
- background:#17243a;
- color:white;
- border:1px solid #30425e;
- border-radius:9px;
- padding:10px 13px;
- cursor:pointer;
- margin:3px
+.desktop-content {
+  max-width: 700px;
+  margin: auto;
+  padding: 45px 20px;
+  text-align: center;
 }
 
-button:hover{
- background:#223654;
- border-color:#61adff
+.robot {
+  font-size: 75px;
 }
 
-button:disabled{
- opacity:.4;
- cursor:not-allowed
+.desktop-content h1 {
+  font-size: 40px;
+  margin: 10px 0;
 }
 
-.active{
- background:#4da3ff!important;
- color:#06101d!important
+.desktop-content p {
+  color: #666;
+  font-size: 17px;
+  line-height: 1.5;
 }
 
-main{
- max-width:1250px;
- margin:auto;
- padding:10px
+.desktop-button {
+  width: 100%;
+  min-height: 62px;
+  border: 0;
+  border-radius: 18px;
+  margin-top: 12px;
+  font-size: 17px;
+  font-weight: 700;
 }
 
-.grid{
- display:grid;
- grid-template-columns:1.4fr .6fr;
- gap:14px
+.blue {
+  background: #4285f4;
+  color: white;
 }
 
-.panel{
- background:linear-gradient(180deg,#111b2c,#0c131f);
- border:1px solid #273853;
- border-radius:15px;
- padding:16px;
- margin-bottom:14px
+.green {
+  background: #34a853;
+  color: white;
 }
 
-.cards{
- display:grid;
- grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
- gap:10px
+.gray {
+  background: #e8eaed;
+  color: #202124;
 }
 
-.card{
- background:#111c2e;
- border:1px solid #293b58;
- border-radius:12px;
- padding:13px
+.red {
+  background: #ea4335;
+  color: white;
 }
 
-.small{
- color:#91a0b8;
- font-size:13px;
- line-height:1.5
+.purple {
+  background: #7c4dff;
+  color: white;
 }
 
-.row{
- display:flex;
- justify-content:space-between;
- align-items:center;
- gap:8px;
- flex-wrap:wrap
+.orange {
+  background: #f9ab00;
+  color: #202124;
 }
 
-.tag{
- display:inline-block;
- padding:3px 7px;
- border-radius:20px;
- background:#1b2a43;
- color:#a9d3ff;
- font-size:11px
+.mobile-entry {
+  width: 100%;
+  min-height: 95px;
+  margin-top: 30px;
+  border: 0;
+  border-radius: 25px;
+  background:
+    linear-gradient(
+      135deg,
+      #4285f4,
+      #7c4dff
+    );
+  color: white;
+  font-size: 22px;
+  font-weight: 800;
+  box-shadow:
+    0 10px 30px rgba(66,133,244,.25);
 }
 
-.bar{
- height:9px;
- background:#05090f;
- border-radius:20px;
- overflow:hidden;
- margin:7px 0 12px
+.mobile-entry small {
+  display: block;
+  margin-top: 6px;
+  font-size: 13px;
+  font-weight: 500;
 }
 
-.bar i{
- display:block;
- height:100%;
- background:#55d68b;
- width:0
+/* =====================================================
+   MÓVIL
+===================================================== */
+
+#mobile {
+  display: none;
+  min-height: 100vh;
+  background:
+    linear-gradient(
+      180deg,
+      #0b1020,
+      #182235
+    );
+  color: white;
 }
 
-.log{
- max-height:300px;
- overflow:auto
+.mobile-header {
+  height: 68px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 14px;
+  background: rgba(0,0,0,.35);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(15px);
 }
 
-.log div{
- padding:8px 0;
- border-bottom:1px solid #ffffff0b;
- font-size:13px
+.mobile-title {
+  font-size: 20px;
+  font-weight: 800;
 }
 
-.good{color:#67e39b}
-.bad{color:#ff7777}
-.warn{color:#ffd166}
-.news{color:#65b9ff}
-
-.console{
- height:230px;
- border-radius:17px;
- border:3px solid #303d51;
- background:linear-gradient(145deg,#252f40,#080b10);
- display:flex;
- justify-content:center;
- align-items:center;
- position:relative;
- overflow:hidden
+.back {
+  border: 0;
+  background: rgba(255,255,255,.1);
+  color: white;
+  border-radius: 13px;
+  padding: 11px 15px;
+  font-weight: 700;
 }
 
-.screen{
- width:60%;
- height:62%;
- background:#05080b;
- border:5px solid #394558;
- display:flex;
- justify-content:center;
- align-items:center;
- text-align:center;
- color:#7edcff;
- font-weight:bold;
- overflow:hidden
+.mobile-page {
+  padding: 20px 15px 55px;
+  max-width: 1000px;
+  margin: auto;
 }
 
-.controls{
- position:absolute;
- bottom:18px;
- display:flex;
- gap:15px
+.mobile-hero {
+  text-align: center;
+  padding: 28px 10px;
 }
 
-.dpad{
- width:55px;
- height:30px;
- background:#111;
- border-radius:5px
+.mobile-hero-icon {
+  font-size: 70px;
 }
 
-.round{
- width:32px;
- height:32px;
- border-radius:50%;
- background:#a51e40
+.mobile-hero h1 {
+  font-size: 36px;
+  margin: 8px 0;
 }
 
-.modal{
- position:fixed;
- inset:0;
- background:#000b;
- display:none;
- align-items:center;
- justify-content:center;
- padding:20px;
- z-index:100
+.mobile-hero p {
+  color: #aeb6c2;
+  line-height: 1.5;
 }
 
-.modal.open{
- display:flex
+.mobile-button {
+  width: 100%;
+  min-height: 60px;
+  border: 0;
+  border-radius: 17px;
+  margin-top: 11px;
+  font-size: 16px;
+  font-weight: 800;
 }
 
-.modalbox{
- max-width:650px;
- width:100%;
- max-height:90vh;
- overflow:auto;
- background:#121d30;
- border:1px solid #344968;
- border-radius:18px;
- padding:22px;
- box-shadow:0 20px 60px #000
+.mobile-button:disabled {
+  opacity: .5;
 }
 
-.bigRating{
- font-size:60px;
- font-weight:900
+.mobile-button small {
+  display: block;
+  margin-top: 4px;
+  opacity: .75;
+  font-size: 12px;
 }
 
-.debt{
- color:#ff7777!important
+.card {
+  background: rgba(255,255,255,.07);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 22px;
+  padding: 18px;
+  margin-bottom: 15px;
 }
 
-.warningBox{
- border:1px solid #704343;
- background:#321719;
- color:#ffb0b0;
- padding:12px;
- border-radius:10px;
- margin-bottom:12px
+.card h2 {
+  margin-top: 0;
 }
 
-footer{
- text-align:center;
- color:#64748b;
- padding:25px;
- font-size:12px
+/* =====================================================
+   INPUT
+===================================================== */
+
+.input {
+  width: 100%;
+  height: 54px;
+  border: 0;
+  border-radius: 14px;
+  padding: 0 14px;
+  font-size: 16px;
+  outline: none;
+  margin-top: 8px;
 }
 
-@media(max-width:800px){
- .grid{
-  grid-template-columns:1fr
- }
+/* =====================================================
+   CLASES
+===================================================== */
 
- .stat{
-  min-width:75px
- }
-
- .console{
-  height:190px
- }
-
- .screen{
-  width:70%
- }
+.class-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  background: rgba(255,255,255,.07);
+  border-radius: 15px;
+  margin-top: 10px;
 }
+
+.class-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #4285f4;
+}
+
+.class-info {
+  flex: 1;
+}
+
+.class-name {
+  font-weight: 800;
+}
+
+.class-count {
+  color: #9ca3af;
+  font-size: 12px;
+  margin-top: 3px;
+}
+
+.delete-class {
+  border: 0;
+  background: rgba(234,67,53,.15);
+  color: #ff6b6b;
+  border-radius: 10px;
+  padding: 9px;
+}
+
+/* =====================================================
+   NUEVO DISEÑO DE CÁMARA
+===================================================== */
+
+/*
+   En escritorio:
+   cámara a la izquierda
+   controles a la derecha
+*/
+
+.camera-layout {
+  display: grid;
+  grid-template-columns: minmax(300px, 1.4fr) minmax(220px, .7fr);
+  gap: 18px;
+  align-items: stretch;
+}
+
+.camera-side {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+}
+
+.camera-side-title {
+  font-size: 20px;
+  font-weight: 900;
+  margin-bottom: 3px;
+}
+
+.camera-side-text {
+  color: #aeb6c2;
+  font-size: 13px;
+  line-height: 1.5;
+  margin-bottom: 5px;
+}
+
+.camera-app {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  min-height: 330px;
+  background: #000;
+  border-radius: 28px;
+  overflow: hidden;
+  position: relative;
+  box-shadow:
+    0 15px 45px rgba(0,0,0,.45);
+}
+
+.camera-app video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: none;
+}
+
+.camera-app::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(0,0,0,.55),
+      transparent 25%,
+      transparent 65%,
+      rgba(0,0,0,.7)
+    );
+}
+
+.camera-top {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  right: 15px;
+  z-index: 5;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.camera-pill {
+  background: rgba(0,0,0,.65);
+  backdrop-filter: blur(12px);
+  color: white;
+  padding: 9px 13px;
+  border-radius: 14px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.camera-controls {
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 25px;
+}
+
+.camera-small {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  border: 0;
+  background: rgba(0,0,0,.68);
+  backdrop-filter: blur(10px);
+  color: white;
+  font-size: 23px;
+  box-shadow:
+    0 5px 20px rgba(0,0,0,.3);
+}
+
+.camera-small:active {
+  transform: scale(.9);
+}
+
+.camera-capture {
+  width: 82px;
+  height: 82px;
+  border-radius: 50%;
+  border: 6px solid white;
+  background: #4285f4;
+  color: white;
+  font-size: 30px;
+  box-shadow:
+    0 5px 25px rgba(0,0,0,.4);
+}
+
+.camera-capture:active {
+  transform: scale(.88);
+}
+
+.camera-placeholder {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #aaa;
+  font-size: 17px;
+}
+
+.camera-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* =====================================================
+   ENTRENAMIENTO
+===================================================== */
+
+.training-title {
+  text-align: center;
+}
+
+.epoch {
+  text-align: center;
+  font-size: 30px;
+  font-weight: 900;
+  margin: 15px;
+}
+
+.progress {
+  width: 100%;
+  height: 12px;
+  background: rgba(255,255,255,.1);
+  border-radius: 20px;
+  overflow: hidden;
+  margin-top: 12px;
+}
+
+.progress-bar {
+  height: 100%;
+  width: 0%;
+  background: #4285f4;
+  transition: width .2s;
+}
+
+.training-log {
+  max-height: 180px;
+  overflow-y: auto;
+  background: #080c13;
+  border-radius: 14px;
+  padding: 12px;
+  font-family: monospace;
+  font-size: 11px;
+  color: #8fffa7;
+  margin-top: 15px;
+}
+
+/* =====================================================
+   RESULTADO
+===================================================== */
+
+.result {
+  background: rgba(255,255,255,.08);
+  border-radius: 20px;
+  padding: 18px;
+  margin-top: 15px;
+  text-align: center;
+}
+
+.result-label {
+  color: #9ca3af;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.result-name {
+  font-size: 32px;
+  font-weight: 900;
+  margin-top: 5px;
+}
+
+.result-confidence {
+  color: #aeb6c2;
+  margin-top: 4px;
+}
+
+/* =====================================================
+   PREDICCIONES
+===================================================== */
+
+.prediction {
+  margin-top: 15px;
+}
+
+.prediction-top {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+}
+
+.prediction-track {
+  height: 9px;
+  background: rgba(255,255,255,.1);
+  border-radius: 20px;
+  overflow: hidden;
+  margin-top: 5px;
+}
+
+.prediction-fill {
+  height: 100%;
+  width: 0%;
+  background: #4285f4;
+  transition: width .15s;
+}
+
+/* =====================================================
+   RECONOCIMIENTO
+===================================================== */
+
+.recognition-camera {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background: #000;
+  border-radius: 28px;
+  overflow: hidden;
+  position: relative;
+}
+
+.recognition-camera video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: none;
+}
+
+.recognition-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border: 2px solid rgba(66,133,244,.3);
+  border-radius: 28px;
+}
+
+.recognition-top {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  right: 15px;
+  z-index: 5;
+  display: flex;
+  justify-content: space-between;
+}
+
+.recognition-pill {
+  padding: 9px 13px;
+  border-radius: 13px;
+  background: rgba(0,0,0,.65);
+  backdrop-filter: blur(10px);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.recognition-controls {
+  position: absolute;
+  bottom: 18px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  z-index: 5;
+}
+
+/* =====================================================
+   RAISE
+===================================================== */
+
+.raise-card {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(124,77,255,.18),
+      rgba(66,133,244,.12)
+    );
+  border: 1px solid rgba(124,77,255,.35);
+}
+
+.raise-icon {
+  font-size: 48px;
+  text-align: center;
+  margin-bottom: 5px;
+}
+
+.raise-title {
+  text-align: center;
+  font-size: 25px;
+  font-weight: 900;
+}
+
+.raise-description {
+  color: #c4cbd6;
+  line-height: 1.55;
+  font-size: 14px;
+}
+
+.raise-status {
+  background: rgba(0,0,0,.25);
+  border-radius: 14px;
+  padding: 12px;
+  margin-top: 12px;
+  font-size: 13px;
+  color: #cdd4df;
+}
+
+.export-info {
+  margin-top: 12px;
+  color: #9ca3af;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+.status {
+  text-align: center;
+  color: #9ca3af;
+  font-size: 13px;
+  padding: 12px;
+}
+
+/* =====================================================
+   LOADING
+===================================================== */
+
+.loading-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #0b1020;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  color: white;
+}
+
+.loading-icon {
+  font-size: 65px;
+  animation: pulse 1.2s infinite;
+}
+
+.loading-text {
+  margin-top: 15px;
+  color: #aeb6c2;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.12);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* =====================================================
+   MÓVIL
+===================================================== */
+
+@media (max-width: 799px) {
+
+  .camera-layout {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .camera-app {
+    min-height: 0;
+    aspect-ratio: 4 / 3;
+  }
+
+  .camera-side {
+    order: 2;
+  }
+
+  .camera-side-title {
+    display: none;
+  }
+
+  .camera-side-text {
+    display: none;
+  }
+
+  .camera-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .camera-actions .mobile-button {
+    margin-top: 0;
+  }
+
+}
+
+@media (min-width: 800px) {
+
+  #desktop {
+    display: block !important;
+  }
+
+}
+
+@media (max-width: 380px) {
+
+  .mobile-page {
+    padding-left: 11px;
+    padding-right: 11px;
+  }
+
+  .camera-controls {
+    gap: 17px;
+  }
+
+  .camera-capture {
+    width: 74px;
+    height: 74px;
+  }
+
+  .camera-small {
+    width: 50px;
+    height: 50px;
+  }
+
+}
+
 </style>
 </head>
 
 <body>
 
-<header>
+<div id="loadingScreen" class="loading-screen">
 
-<div class="top">
+  <div class="loading-icon">
+    🤖
+  </div>
 
-<div>
-<h1>🎮 Console Factory</h1>
-
-<div class="small">
-Construye consolas desde 1972 hasta 2026
-</div>
-</div>
-
-<div class="stats">
-
-<div class="stat">
-<b id="year">1972</b>
-<span>Año</span>
-</div>
-
-<div class="stat">
-<b id="day">1/365</b>
-<span>Día</span>
-</div>
-
-<div class="stat">
-<b id="money">$10,000</b>
-<span>Dinero</span>
-</div>
-
-<div class="stat">
-<b id="fans">0</b>
-<span>Reputación</span>
-</div>
-
-<div class="stat">
-<b id="sales">0</b>
-<span>Ventas</span>
-</div>
-
-<div class="stat">
-<b id="clock">10:00</b>
-<span>Año termina en</span>
-</div>
+  <div class="loading-text">
+    Cargando IA-Objetos...
+  </div>
 
 </div>
 
+<!-- =====================================================
+     DESKTOP
+===================================================== -->
+
+<div id="desktop">
+
+  <header class="desktop-header">
+
+    <div class="logo">
+      IA-<span>Objetos</span>
+    </div>
+
+    <div>
+      🤖
+    </div>
+
+  </header>
+
+  <main class="desktop-content">
+
+    <div class="robot">
+      🤖
+    </div>
+
+    <h1>
+      IA-<span style="color:#4285f4">
+        Objetos
+      </span>
+    </h1>
+
+    <p>
+      Crea tu propia inteligencia artificial
+      para reconocer objetos.
+    </p>
+
+    <button
+      class="desktop-button blue"
+      onclick="crearIA()">
+
+      🧠 Crear IA
+
+    </button>
+
+    <button
+      class="desktop-button green"
+      onclick="abrirModelo()">
+
+      📂 Mi modelo
+
+    </button>
+
+    <button
+      class="mobile-entry"
+      onclick="entrarMovil()">
+
+      📱 MODO MÓVIL
+
+      <small>
+        Crea y entrena tu IA desde tu dispositivo
+      </small>
+
+    </button>
+
+  </main>
+
 </div>
 
-<div class="timeline">
-<div id="timeline"></div>
-</div>
+<!-- =====================================================
+     MÓVIL
+===================================================== -->
+
+<div id="mobile">
+
+<header class="mobile-header">
+
+  <button
+    class="back"
+    onclick="salirMovil()">
+
+    ← Volver
+
+  </button>
+
+  <div class="mobile-title">
+    📱 IA-Objetos
+  </div>
+
+  <div>
+    🤖
+  </div>
 
 </header>
 
+<!-- HOME -->
 
-<nav id="mainNav">
+<section
+  id="pageHome"
+  class="mobile-page">
 
-<button class="active" data-tab="factory">
-🏭 Fábrica
-</button>
+  <div class="mobile-hero">
 
-<button data-tab="design">
-🧩 Diseño
-</button>
+    <div class="mobile-hero-icon">
+      🤖
+    </div>
 
-<button data-tab="research">
-🔬 Investigación
-</button>
+    <h1>
+      IA-Objetos
+    </h1>
 
-<button data-tab="market">
-💰 Economía
-</button>
+    <p>
+      Crea y entrena tu propia inteligencia
+      artificial directamente desde tu móvil.
+    </p>
 
-<button data-tab="history">
-📜 Consolas
-</button>
-
-</nav>
-
-
-<main>
-
-<section id="factory" class="tab">
-
-<div class="grid">
-
-<div>
-
-<div class="panel">
-
-<h2 id="eraTitle">
-Primeros experimentos
-</h2>
-
-<p id="eraDescription" class="small"></p>
-
-<div id="tasks" class="cards"></div>
-
-</div>
-
-
-<div class="panel">
-
-<h2>🏗️ Línea de producción</h2>
-
-<div id="status"></div>
-
-</div>
-
-</div>
-
-
-<div>
-
-<div class="panel">
-
-<h3>📰 Noticias</h3>
-
-<div id="currentNews"></div>
-
-<button onclick="showNews()">
-Leer noticia del año
-</button>
-
-</div>
-
-
-<div class="panel">
-
-<h3>📋 Registro</h3>
-
-<div class="log" id="log"></div>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-
-
-<section id="design" class="tab" style="display:none">
-
-<div class="grid">
-
-<div class="panel">
-
-<h2>🧩 Diseñar consola</h2>
-
-<p class="small">
-Las tecnologías aparecen en orden cronológico.
-Primero debes investigar y después comprar la tecnología.
-</p>
-
-<div id="components" class="cards"></div>
-
-</div>
-
-
-<div class="panel">
-
-<h2>🖥️ Consola</h2>
-
-<div class="console">
-
-<div class="screen" id="screenText">
-PROYECTO 01
-</div>
-
-<div class="controls">
-<div class="dpad"></div>
-<div class="round"></div>
-</div>
-
-</div>
-
-<br>
-
-<button onclick="renameConsole()">
-✏️ Cambiar nombre
-</button>
-
-<button onclick="saveGame()">
-💾 Guardar
-</button>
-
-</div>
-
-</div>
-
-</section>
-
-
-<section id="research" class="tab" style="display:none">
-
-<div class="panel">
-
-<h2>🔬 Investigación y desarrollo</h2>
-
-<p class="small">
-Investigar cuesta dinero, pero permite desbloquear tecnologías
-que después podrás instalar en tu consola.
-</p>
-
-<div id="researchCards" class="cards"></div>
-
-</div>
-
-</section>
-
-
-<section id="market" class="tab" style="display:none">
-
-<div class="grid">
-
-<div class="panel">
-
-<h2>💰 Economía</h2>
-
-<div id="marketCards" class="cards"></div>
-
-</div>
-
-<div class="panel">
-
-<h2>📊 Finanzas</h2>
-
-<div id="economy"></div>
-
-</div>
-
-</div>
-
-</section>
-
-
-<section id="history" class="tab" style="display:none">
-
-<div class="panel">
-
-<h2>📜 Consolas fabricadas</h2>
-
-<div id="historyList"></div>
-
-</div>
-
-</section>
-
-</main>
-
-
-<footer>
-Console Factory — simulación educativa de evolución tecnológica.
-</footer>
-
-
-<!-- NOTICIAS -->
-
-<div class="modal" id="newsModal">
-
-<div class="modalbox">
-
-<div id="newsContent"></div>
-
-<button onclick="closeNews()">
-Cerrar
-</button>
-
-</div>
-
-</div>
-
-
-<!-- CALIFICACIÓN -->
-
-<div class="modal" id="ratingModal">
-
-<div class="modalbox">
-
-<div id="ratingContent"></div>
-
-<button onclick="closeRating()">
-Continuar
-</button>
-
-</div>
-
-</div>
-
-
-<!-- BANCARROTA -->
-
-<div class="modal" id="bankruptcyModal">
-
-<div class="modalbox">
-
-<div id="bankruptcyContent"></div>
-
-<button onclick="closeBankruptcy()">
-Aceptar
-</button>
-
-</div>
-
-</div>
-
-
-<script>
-
-/* =========================================================
-   HISTORIA
-========================================================= */
-
-const HISTORY=[
-
-[1972,"Primeros videojuegos domésticos",
-"Las primeras consolas domésticas convierten la electrónica y la salida de vídeo en los grandes retos."],
-
-[1973,"La electrónica se simplifica",
-"Los diseñadores buscan reducir componentes y costes."],
-
-[1974,"Más juegos con el mismo hardware",
-"Los ingenieros buscan aumentar las posibilidades de los circuitos."],
-
-[1975,"Llegan los microprocesadores",
-"Los microprocesadores permiten crear sistemas mucho más programables."],
-
-[1976,"Los chips toman protagonismo",
-"La integración electrónica cambia la manera de diseñar las consolas."],
-
-[1977,"La era de los cartuchos",
-"Los cartuchos permiten cambiar de juego sin cambiar toda la máquina."],
-
-[1978,"Más memoria",
-"Los desarrolladores necesitan más memoria para juegos más complejos."],
-
-[1979,"La batalla de los 8 bits",
-"CPU, memoria y vídeo empiezan a convertirse en el centro del diseño."],
-
-[1980,"El videojuego entra en los hogares",
-"La fabricación en volumen empieza a ser fundamental."],
-
-[1981,"Los controles evolucionan",
-"Los fabricantes experimentan con nuevas formas de interacción."],
-
-[1982,"Más color y sonido",
-"Los chips dedicados permiten experiencias audiovisuales más completas."],
-
-[1983,"Reajuste de la industria",
-"Calidad, coste y software se vuelven factores decisivos."],
-
-[1984,"Nuevos diseños",
-"Las compañías buscan arquitecturas más eficientes."],
-
-[1985,"Los 8 bits se refinan",
-"Los desarrolladores aprovechan mejor memoria, sprites y sonido."],
-
-[1986,"Herramientas de desarrollo",
-"Los kits y procesos para crear juegos empiezan a cobrar importancia."],
-
-[1987,"Más potencia",
-"La competencia tecnológica aumenta."],
-
-[1988,"Llegan los 16 bits",
-"Los nuevos procesadores permiten diseños más complejos."],
-
-[1989,"Los 16 bits despegan",
-"Gráficos, sonido y controles mejoran notablemente."],
-
-[1990,"La consola como plataforma",
-"Las compañías comienzan a construir ecosistemas completos."],
-
-[1991,"Más efectos gráficos",
-"Los chips gráficos especializados ganan importancia."],
-
-[1992,"Audio y gráficos digitales",
-"La calidad audiovisual se vuelve fundamental."],
-
-[1993,"El 3D entra en escena",
-"Las compañías comienzan a investigar aceleración 3D."],
-
-[1994,"La era del CD",
-"El almacenamiento óptico permite guardar mucha más información."],
-
-[1995,"Interfaces más completas",
-"Menús, guardado y funciones multimedia empiezan a crecer."],
-
-[1996,"El 3D se normaliza",
-"Las consolas necesitan hardware gráfico cada vez más especializado."],
-
-[1997,"Procesadores más rápidos",
-"Los mundos 3D requieren más rendimiento."],
-
-[1998,"Memoria y accesorios",
-"Los fabricantes exploran nuevas formas de ampliar las consolas."],
-
-[1999,"La siguiente generación",
-"Se preparan arquitecturas mucho más potentes."],
-
-[2000,"La era multimedia",
-"DVD, almacenamiento e interfaces pasan a formar parte del diseño."],
-
-[2001,"Conectividad",
-"Las redes empiezan a integrarse en las plataformas."],
-
-[2002,"Discos y servicios",
-"El almacenamiento y las funciones online crecen."],
-
-[2003,"Juegos conectados",
-"Los servicios online se vuelven más importantes."],
-
-[2004,"Portabilidad y sensores",
-"Los fabricantes experimentan con nuevos controles."],
-
-[2005,"Alta definición",
-"La HD cambia las necesidades de GPU y salida de vídeo."],
-
-[2006,"La consola conectada",
-"Perfiles, actualizaciones y servicios forman parte del sistema."],
-
-[2007,"Interfaces digitales",
-"Los sistemas operativos de consola reciben más funciones."],
-
-[2008,"Distribución digital",
-"Las descargas empiezan a complementar al formato físico."],
-
-[2009,"Más servicios",
-"Las actualizaciones de software se vuelven normales."],
-
-[2010,"Sensores y movimiento",
-"Los controles físicos reciben nuevas funciones."],
-
-[2011,"HD consolidada",
-"El rendimiento gráfico continúa aumentando."],
-
-[2012,"La siguiente transición",
-"Los fabricantes preparan arquitecturas modernas."],
-
-[2013,"La era moderna",
-"CPU multinúcleo, GPU potente, red y sistema operativo convergen."],
-
-[2014,"Distribución digital madura",
-"La consola se convierte también en una plataforma de servicios."],
-
-[2015,"HDR y mejores gráficos",
-"La calidad visual continúa avanzando."],
-
-[2016,"Revisiones de hardware",
-"Las compañías experimentan con revisiones y modelos mejorados."],
-
-[2017,"Portabilidad híbrida",
-"Surgen nuevas formas de jugar en casa y fuera."],
-
-[2018,"SSD y streaming",
-"La velocidad de almacenamiento gana protagonismo."],
-
-[2019,"Preparando la nueva generación",
-"SSD, CPU y GPU modernas dominan el diseño."],
-
-[2020,"Nueva generación",
-"SSD rápido y gráficos avanzados llegan al centro del diseño."],
-
-[2021,"Servicios y almacenamiento",
-"El software conectado es cada vez más importante."],
-
-[2022,"Optimización energética",
-"Consumo, temperatura y rendimiento se vuelven decisiones clave."],
-
-[2023,"Escalado gráfico",
-"Las técnicas modernas permiten mejorar imagen y rendimiento."],
-
-[2024,"Hardware eficiente",
-"Las compañías buscan más rendimiento por vatio."],
-
-[2025,"La plataforma es un ecosistema",
-"Hardware, sistema operativo y servicios deben funcionar juntos."],
-
-[2026,"La consola moderna",
-"Tu empresa llega a la era de consolas potentes, conectadas y complejas."]
-
-];
-
-
-/* =========================================================
-   TECNOLOGÍAS
-========================================================= */
-
-const TECH={
-
-cpu:[
-["Lógica discreta",1972,600,2],
-["Microprocesador 8-bit",1975,1800,6],
-["CPU 16-bit",1979,5500,11],
-["CPU 32-bit",1989,18000,18],
-["CPU 64-bit",1999,50000,27],
-["CPU multinúcleo",2005,120000,38],
-["CPU moderna",2013,350000,50]
-],
-
-gpu:[
-["Vídeo básico",1972,400,2],
-["Sprites 2D",1977,1600,6],
-["Gráficos 16-bit",1988,6500,12],
-["Aceleración 3D",1994,30000,23],
-["GPU HD",2005,130000,35],
-["GPU avanzada",2013,380000,48],
-["Ray tracing / 4K",2020,650000,62]
-],
-
-ram:[
-["2 KB",1972,250,1],
-["16 KB",1977,700,4],
-["128 KB",1983,1800,8],
-["2 MB",1993,7000,15],
-["32 MB",1998,18000,22],
-["512 MB",2005,50000,31],
-["8 GB",2013,160000,45],
-["16 GB",2020,230000,55]
-],
-
-storage:[
-["Cartucho básico",1972,300,2],
-["Cartucho ROM",1977,1300,6],
-["CD-ROM",1994,10000,16],
-["DVD",2000,22000,24],
-["Disco duro",2001,45000,31],
-["Blu-ray",2006,70000,36],
-["SSD",2013,150000,48]
-],
-
-audio:[
-["Audio básico",1972,200,2],
-["Chip multicanal",1977,900,6],
-["PCM digital",1988,7000,14],
-["Audio 3D",1995,22000,24],
-["Audio HD",2005,60000,36]
-],
-
-controls:[
-["Paddles / botones",1972,250,2],
-["Joystick",1977,600,5],
-["D-pad + botones",1983,2500,11],
-["Gamepad avanzado",1989,7000,18],
-["Analógico + vibración",1996,22000,28],
-["Inalámbrico",2005,55000,38],
-["Control moderno",2013,130000,48]
-],
-
-system:[
-["Firmware",1972,400,2],
-["Menú básico",1977,1200,5],
-["Guardado",1989,7000,13],
-["Sistema multimedia",2000,40000,25],
-["SO conectado",2006,100000,38],
-["Interfaz moderna",2013,230000,50]
-],
-
-network:[
-["Sin red",1972,0,0],
-["Módem",1985,4000,7],
-["Ethernet",1995,14000,17],
-["Wi-Fi",2002,50000,28],
-["Servicios online",2006,140000,40],
-["Red moderna",2013,280000,50]
-]
-
-};
-
-
-const NAMES={
-cpu:["CPU","Procesador principal"],
-gpu:["GPU","Gráficos"],
-ram:["RAM","Memoria"],
-storage:["Almacenamiento","Cartuchos, discos o memoria"],
-audio:["Audio","Sistema de sonido"],
-controls:["Controles","Entrada del jugador"],
-system:["Sistema","Firmware y sistema operativo"],
-network:["Red","Conectividad"]
-};
-
-
-/* =========================================================
-   ERAS
-========================================================= */
-
-const ERAS=[
-
-[1972,1974,"Primeros experimentos",9000],
-[1975,1977,"Microprocesadores",14000],
-[1978,1982,"8 bits",25000],
-[1983,1988,"16 bits",55000],
-[1989,1994,"Era 3D",120000],
-[1995,2000,"Multimedia",250000],
-[2001,2006,"Online",500000],
-[2007,2013,"HD",900000],
-[2014,2019,"4K y servicios",1800000],
-[2020,2026,"Generación moderna",3500000]
-
-];
-
-
-/* =========================================================
-   CONFIGURACIÓN ECONÓMICA
-========================================================= */
-
-/*
-   IMPORTANTE:
-
-   El dinero YA NO se reinicia ni se resta cada segundo.
-
-   Cada día tiene un coste.
-   El juego avanza 1 día cada ~1.64 segundos,
-   porque 365 días = 10 minutos.
-
-   El dinero puede bajar hasta -$10,000.
-
-   Al llegar a -$10,000:
-   - la empresa quiebra;
-   - se detiene el reloj;
-   - aparece la pantalla de bancarrota.
-*/
-
-const STARTING_MONEY=10000;
-
-const DEBT_LIMIT=-10000;
-
-let bankrupt=false;
-
-let game={
-
-year:1972,
-
-day:1,
-
-money:STARTING_MONEY,
-
-reputation:0,
-
-research:[],
-
-levels:{
- cpu:0,
- gpu:0,
- ram:0,
- storage:0,
- audio:0,
- controls:0,
- system:0,
- network:0
-},
-
-design:{
- name:"Proyecto 01",
- progress:0,
- tests:0
-},
-
-sales:0,
-
-revenue:0,
-
-expenses:0,
-
-consoles:[],
-
-debts:0
-
-};
-
-
-/* =========================================================
-   UTILIDADES
-========================================================= */
-
-const $=id=>document.getElementById(id);
-
-function money(n){
-
- const value=Math.round(n);
-
- return (value<0?"-$":"$")+
- Math.abs(value).toLocaleString("en-US");
-
-}
-
-
-function clamp(n,a,b){
-
- return Math.max(
-  a,
-  Math.min(b,n)
- );
-
-}
-
-
-function era(){
-
- return ERAS.find(
-  x=>
-   game.year>=x[0] &&
-   game.year<=x[1]
- ) || ERAS[ERAS.length-1];
-
-}
-
-
-function quality(){
-
- let q=0;
-
- for(let k in game.levels){
-
-  q+=(game.levels[k]+1)*3;
-
- }
-
- q+=game.design.tests*5;
-
- q+=Math.floor(
-  game.reputation/4
- );
-
- return q;
-
-}
-
-
-function target(){
-
- return 28+
- Math.floor(
-  (game.year-1972)/2.1
- );
-
-}
-
-
-function dailyCost(){
-
- /*
-   Antes el coste era suficientemente grande
-   para vaciar la cuenta en segundos.
-
-   Ahora es pequeño y solamente se cobra
-   cuando realmente pasa un día.
- */
-
- return Math.max(
-  2,
-  Math.round(
-   era()[3]/180000
-  )
- );
-
-}
-
-
-function researched(k,i){
-
- return i===0 ||
- game.research.includes(
-  k+"-"+i
- );
-
-}
-
-
-/* =========================================================
-   CONTROL DE DEUDA
-========================================================= */
-
-function checkBankruptcy(){
-
- if(
-  game.money<=DEBT_LIMIT
- ){
-
-  game.money=DEBT_LIMIT;
-
-  bankrupt=true;
-
-  clearInterval(dayTimer);
-
-  log(
-   "💀 LA EMPRESA HA QUEBRADO. Has alcanzado la deuda máxima de "+
-   money(Math.abs(DEBT_LIMIT))+".",
-   "bad"
-  );
-
-  showBankruptcy();
-
-  render();
-
-  return true;
-
- }
-
- return false;
-
-}
-
-
-function spend(amount,reason="Gasto"){
-
- amount=Math.max(
-  0,
-  Math.round(amount)
- );
-
- if(
-  amount===0
- ){
-
-  return true;
-
- }
-
- game.money-=amount;
-
- game.expenses+=amount;
-
- if(
-  game.money<DEBT_LIMIT
- ){
-
-  game.money=DEBT_LIMIT;
-
- }
-
- log(
-  "💸 "+reason+": "+money(amount),
-  "warn"
- );
-
- checkBankruptcy();
-
- return !bankrupt;
-
-}
-
-
-function earn(amount,reason="Ingreso"){
-
- amount=Math.max(
-  0,
-  Math.round(amount)
- );
-
- game.money+=amount;
-
- game.revenue+=amount;
-
- log(
-  "💰 "+reason+": +"+money(amount),
-  "good"
- );
-
- render();
-
-}
-
-
-/* =========================================================
-   LOG
-========================================================= */
-
-function log(message,type=""){
-
- if(!$("log")) return;
-
- $("log").innerHTML=
- `<div class="${type}">
- Día ${game.day} · ${game.year}: ${message}
- </div>`+
- $("log").innerHTML;
-
-}
-
-
-/* =========================================================
-   GUARDADO
-========================================================= */
-
-function saveGame(){
-
- localStorage.setItem(
-  "consoleFactorySave",
-  JSON.stringify(game)
- );
-
- log(
-  "💾 Partida guardada correctamente.",
-  "good"
- );
-
- render();
-
-}
-
-
-function loadGame(){
-
- try{
-
-  const data=
-   localStorage.getItem(
-    "consoleFactorySave"
-   );
-
-  if(data){
-
-   const saved=
-    JSON.parse(data);
-
-   game=
-    Object.assign(
-     game,
-     saved
-    );
-
-   /*
-      Compatibilidad con partidas antiguas.
-   */
-
-   game.research=
-    Array.isArray(game.research)
-    ?game.research
-    :[];
-
-   game.consoles=
-    Array.isArray(game.consoles)
-    ?game.consoles
-    :[];
-
-   game.levels=
-    Object.assign(
-     {
-      cpu:0,
-      gpu:0,
-      ram:0,
-      storage:0,
-      audio:0,
-      controls:0,
-      system:0,
-      network:0
-     },
-     game.levels||{}
-    );
-
-   game.design=
-    Object.assign(
-     {
-      name:"Proyecto 01",
-      progress:0,
-      tests:0
-     },
-     game.design||{}
-    );
-
-   /*
-      Si una partida antigua tiene demasiado
-      dinero negativo, la limitamos.
-   */
-
-   if(
-    game.money<DEBT_LIMIT
-   ){
-
-    game.money=DEBT_LIMIT;
-
-   }
-
-  }
-
- }catch(error){
-
-  console.error(
-   "Error cargando partida:",
-   error
-  );
-
- }
-
-}
-
-
-/* =========================================================
-   RENOMBRAR
-========================================================= */
-
-function renameConsole(){
-
- if(bankrupt){
-
-  return;
-
- }
-
- const name=
-  prompt(
-   "Nombre de la consola:",
-   game.design.name
-  );
-
- if(
-  name &&
-  name.trim()
- ){
-
-  game.design.name=
-   name.trim().substring(0,32);
-
-  render();
-
- }
-
-}
-
-
-/* =========================================================
-   PASAR DÍA
-========================================================= */
-
-function nextDay(){
-
- if(bankrupt){
-
-  return;
-
- }
-
- if(
-  game.year===2026 &&
-  game.day===365
- ){
-
-  clearInterval(dayTimer);
-
-  log(
-   "🏁 Has llegado a 2026.",
-   "news"
-  );
-
-  render();
-
-  return;
-
- }
-
-
- /*
-    AVANZA UN SOLO DÍA.
-    NO SE REINICIA EL DINERO.
- */
-
- game.day++;
-
- const cost=dailyCost();
-
- /*
-    SOLO AQUÍ se cobra el coste diario.
- */
-
- if(
-  !spend(
-   cost,
-   "Costes diarios de la empresa"
-  )
- ){
-
-  return;
-
- }
-
-
- /*
-    Coste mensual.
- */
-
- if(
-  game.day%30===0
- ){
-
-  const monthly=
-   Math.round(
-    era()[3]*0.02
-   );
-
-  if(
-   !spend(
-    monthly,
-    "Costes mensuales de laboratorio"
-   )
-  ){
-
-   return;
-
-  }
-
- }
-
-
- /*
-    Año nuevo.
- */
-
- if(
-  game.day>=365
- ){
-
-  game.day=1;
-
-  if(
-   game.year<2026
-  ){
-
-   game.year++;
-
-   /*
-      Ingreso anual.
-      NO reinicia el dinero.
-   */
-
-   const income=
-    Math.round(
-     1000+
-     game.reputation*60+
-     game.sales*15
-    );
-
-   earn(
-    income,
-    "Ingresos anuales"
-   );
-
-   game.design.progress=0;
-
-   game.design.tests=0;
-
-   const news=
-    HISTORY.find(
-     x=>x[0]===game.year
-    );
-
-   if(news){
-
-    log(
-     "📰 "+
-     news[1]+
-     " — "+
-     news[2],
-     "news"
-    );
-
-   }
-
-  }
-
- }
-
- render();
-
-}
-
-
-/* =========================================================
-   NOTICIAS
-========================================================= */
-
-function showNews(){
-
- const news=
-  HISTORY.find(
-   x=>x[0]===game.year
-  );
-
- if(!news){
-
-  return;
-
- }
-
- $("newsContent").innerHTML=`
-
- <h2>📰 Noticias de ${game.year}</h2>
-
- <h3>${news[1]}</h3>
-
- <p>
- ${news[2]}
- </p>
-
- <p class="small">
- Contexto histórico utilizado por el simulador.
- </p>
-
- `;
-
- $("newsModal")
-  .classList.add("open");
-
-}
-
-
-function closeNews(){
-
- $("newsModal")
-  .classList.remove("open");
-
-}
-
-
-/* =========================================================
-   INVESTIGAR
-========================================================= */
-
-function research(k,i){
-
- if(bankrupt){
-
-  return;
-
- }
-
- const tech=
-  TECH[k][i];
-
- if(!tech){
-
-  return;
-
- }
-
- const cost=
-  Math.max(
-   150,
-   Math.round(
-    tech[2]*0.25
-   )
-  );
-
- if(
-  game.year<
-  tech[1]
- ){
-
-  alert(
-   "Esta tecnología todavía no existe."
-  );
-
-  return;
-
- }
-
- if(
-  researched(k,i)
- ){
-
-  return;
-
- }
-
- /*
-    Permitimos investigar con deuda,
-    siempre que el gasto no lleve por
-    debajo de -$10,000.
- */
-
- if(
-  game.money-cost<DEBT_LIMIT
- ){
-
-  alert(
-   "Ese proyecto te llevaría por debajo del límite de deuda de -$10,000."
-  );
-
-  return;
-
- }
-
- if(
-  !spend(
-   cost,
-   "Investigación de "+tech[0]
-  )
- ){
-
-  return;
-
- }
-
- game.research.push(
-  k+"-"+i
- );
-
- log(
-  "🔬 Investigación terminada: "+
-  tech[0]+".",
-  "good"
- );
-
- render();
-
-}
-
-
-/* =========================================================
-   INSTALAR
-========================================================= */
-
-function install(k,i){
-
- if(bankrupt){
-
-  return;
-
- }
-
- const tech=
-  TECH[k][i];
-
- if(!tech){
-
-  return;
-
- }
-
- if(
-  game.year<
-  tech[1]
- ){
-
-  alert(
-   "Todavía no estamos en "+
-   tech[1]+"."
-  );
-
-  return;
-
- }
-
- if(
-  !researched(k,i)
- ){
-
-  alert(
-   "Primero investiga esta tecnología."
-  );
-
-  return;
-
- }
-
- if(
-  i<=game.levels[k]
- ){
-
-  return;
-
- }
-
- if(
-  i!==game.levels[k]+1
- ){
-
-  alert(
-   "Debes instalar las tecnologías de "+
-   NAMES[k][0]+
-   " en orden."
-  );
-
-  return;
-
- }
-
- if(
-  game.money-tech[2]<DEBT_LIMIT
- ){
-
-  alert(
-   "Esta compra te llevaría por debajo de -$10,000."
-  );
-
-  return;
-
- }
-
- if(
-  !spend(
-   tech[2],
-   "Hardware "+tech[0]
-  )
- ){
-
-  return;
-
- }
-
- game.levels[k]=i;
-
- log(
-  "⚙️ Instalado "+
-  tech[0]+".",
-  "good"
- );
-
- render();
-
-}
-
-
-/* =========================================================
-   CONSTRUIR
-========================================================= */
-
-function buildPrototype(){
-
- if(bankrupt){
-
-  return;
-
- }
-
- const cost=
-  Math.round(
-   era()[3]*0.12
-  );
-
- if(
-  game.money-cost<DEBT_LIMIT
- ){
-
-  alert(
-   "Construir esto te llevaría por debajo de -$10,000."
-  );
-
-  return;
-
- }
-
- if(
-  quality()<
-  target()-12
- ){
-
-  alert(
-   "Tu arquitectura todavía está demasiado incompleta."
-  );
-
-  return;
-
- }
-
- if(
-  !spend(
-   cost,
-   "Construcción del prototipo"
-  )
- ){
-
-  return;
-
- }
-
- game.design.progress=
-  clamp(
-   game.design.progress+25,
-   0,
-   100
-  );
-
- log(
-  "🏗️ Prototipo construido. Avance: "+
-  game.design.progress+"%.",
-  "good"
- );
-
- render();
-
-}
-
-
-/* =========================================================
-   PRUEBAS
-========================================================= */
-
-function testPrototype(){
-
- if(bankrupt){
-
-  return;
-
- }
-
- if(
-  game.design.progress<75
- ){
-
-  alert(
-   "El prototipo necesita al menos 75%."
-  );
-
-  return;
-
- }
-
- const cost=
-  Math.round(
-   era()[3]*0.045
-  );
-
- if(
-  game.money-cost<DEBT_LIMIT
- ){
-
-  alert(
-   "Las pruebas te llevarían por debajo de -$10,000."
-  );
-
-  return;
-
- }
-
- if(
-  !spend(
-   cost,
-   "Pruebas de laboratorio"
-  )
- ){
-
-  return;
-
- }
-
- const roll=
-  quality()+
-  Math.floor(
-   Math.random()*16
-  );
-
- if(
-  roll>=target()
- ){
-
-  game.design.tests++;
-
-  game.reputation+=3;
-
-  log(
-   "🧪 PRUEBAS SUPERADAS ("+
-   roll+"/"+target()+")",
-   "good"
-  );
-
- }else{
-
-  game.design.progress=
-   clamp(
-    game.design.progress-12,
-    0,
-    100
-   );
-
-  game.reputation=
-   Math.max(
-    0,
-    game.reputation-1
-   );
-
-  log(
-   "❌ FALLO DE PRUEBAS ("+
-   roll+"/"+target()+"). El prototipo vuelve a ingeniería.",
-   "bad"
-  );
-
- }
-
- render();
-
-}
-
-
-/* =========================================================
-   CALIFICACIÓN
-========================================================= */
-
-function rating(){
-
- const q=quality();
-
- const t=target();
-
- const technical=
-  clamp(
-   Math.round(
-    q/t*55
-   ),
-   0,
-   55
-  );
-
- const components=
-  Math.min(
-   25,
-   Object.values(
-    game.levels
-   ).filter(
-    x=>x>0
-   ).length*3
-  );
-
- const testing=
-  game.design.tests
-  ?15
-  :0;
-
- return clamp(
-  Math.round(
-   technical+
-   components+
-   testing+
-   5
-  ),
-  1,
-  100
- );
-
-}
-
-
-/* =========================================================
-   FABRICAR Y VENDER
-========================================================= */
-
-function manufacture(){
-
- if(bankrupt){
-
-  return;
-
- }
-
- if(
-  game.design.progress<100
- ){
-
-  alert(
-   "Completa el prototipo al 100%."
-  );
-
-  return;
-
- }
-
- if(
-  !game.design.tests
- ){
-
-  alert(
-   "Primero debes superar las pruebas."
-  );
-
-  return;
-
- }
-
- const cost=
-  Math.round(
-   era()[3]*0.18
-  );
-
- const revenue=
-  Math.round(
-   cost*
-   (
-    1.35+
-    Math.min(
-     1,
-     game.reputation/100
-    )
-   )
-  );
-
- if(
-  game.money-cost<DEBT_LIMIT
- ){
-
-  alert(
-   "No puedes financiar el lote porque superarías la deuda máxima de -$10,000."
-  );
-
-  return;
-
- }
-
- /*
-    Fabricar primero cobra.
-    Después entra el ingreso.
- */
-
- if(
-  !spend(
-   cost,
-   "Fabricación del lote"
-  )
- ){
-
-  return;
-
- }
-
- earn(
-  revenue,
-  "Ventas de "+game.design.name
- );
-
- game.sales++;
-
- const score=
-  rating();
-
- game.reputation+=
-  Math.max(
-   1,
-   Math.round(score/20)
-  );
-
- const consoleData={
-
-  year:game.year,
-
-  day:game.day,
-
-  name:game.design.name,
-
-  rating:score,
-
-  quality:quality(),
-
-  cost:cost,
-
-  revenue:revenue
-
- };
-
- game.consoles.unshift(
-  consoleData
- );
-
- log(
-  "🎉 "+
-  game.design.name+
-  " lanzada. Producción: "+
-  money(cost)+
-  " · Ingresos: "+
-  money(revenue)+
-  " · Nota: "+
-  score+
-  "/100",
-  "good"
- );
-
- showRating(
-  consoleData
- );
-
- /*
-    NUEVO PROYECTO.
- */
-
- game.design.progress=0;
-
- game.design.tests=0;
-
- game.design.name=
-  "Proyecto "+
-  String(
-   game.sales+1
-  ).padStart(
-   2,
-   "0"
-  );
-
- render();
-
-}
-
-
-/* =========================================================
-   MOSTRAR NOTA
-========================================================= */
-
-function showRating(c){
-
- let text;
-
- if(c.rating>=90){
-
-  text="Producto excepcional";
-
- }else if(c.rating>=75){
-
-  text="Muy sólido";
-
- }else if(c.rating>=60){
-
-  text="Correcto, pero mejorable";
-
- }else{
-
-  text="Necesita bastante trabajo";
-
- }
-
- $("ratingContent").innerHTML=`
-
- <h2>⭐ Evaluación de ${c.name}</h2>
-
- <div class="bigRating">
- ${c.rating}/100
- </div>
-
- <h3>${text}</h3>
-
- <p>
- <b>Año:</b> ${c.year}
- </p>
-
- <p>
- <b>Día:</b> ${c.day}
- </p>
-
- <p>
- <b>Calidad técnica:</b> ${c.quality}
- </p>
-
- <p>
- <b>Coste:</b> ${money(c.cost)}
- </p>
-
- <p>
- <b>Ingresos:</b> ${money(c.revenue)}
- </p>
-
- <p class="small">
- La nota combina tecnología instalada,
- completitud del diseño y resultados de las pruebas.
- </p>
-
- `;
-
- $("ratingModal")
-  .classList.add("open");
-
-}
-
-
-function closeRating(){
-
- $("ratingModal")
-  .classList.remove("open");
-
-}
-
-
-/* =========================================================
-   BANCARROTA
-========================================================= */
-
-function showBankruptcy(){
-
- $("bankruptcyContent").innerHTML=`
-
- <h2>💀 IMPERIO EN BANCARROTA</h2>
-
- <div class="bigRating">
- -$10,000
- </div>
-
- <div class="warningBox">
- Has alcanzado el límite máximo de deuda.
- </div>
-
- <p>
- Tu empresa ya no puede continuar.
- </p>
-
- <p class="small">
- Para volver a jugar, utiliza el botón
- "Reiniciar partida".
- </p>
-
- <button onclick="resetGame()">
- 🔄 Reiniciar partida
- </button>
-
- `;
-
- $("bankruptcyModal")
-  .classList.add("open");
-
-}
-
-
-function closeBankruptcy(){
-
- /*
-    No dejamos continuar una partida quebrada.
- */
-
- if(bankrupt){
-
-  return;
-
- }
-
- $("bankruptcyModal")
-  .classList.remove("open");
-
-}
-
-
-/* =========================================================
-   REINICIAR
-========================================================= */
-
-function resetGame(){
-
- const confirmed=
-  confirm(
-   "¿Seguro que quieres borrar la partida y comenzar otra vez con $10,000?"
-  );
-
- if(!confirmed){
-
-  return;
-
- }
-
- clearInterval(dayTimer);
-
- localStorage.removeItem(
-  "consoleFactorySave"
- );
-
- bankrupt=false;
-
- game={
-
-  year:1972,
-
-  day:1,
-
-  money:STARTING_MONEY,
-
-  reputation:0,
-
-  research:[],
-
-  levels:{
-   cpu:0,
-   gpu:0,
-   ram:0,
-   storage:0,
-   audio:0,
-   controls:0,
-   system:0,
-   network:0
-  },
-
-  design:{
-   name:"Proyecto 01",
-   progress:0,
-   tests:0
-  },
-
-  sales:0,
-
-  revenue:0,
-
-  expenses:0,
-
-  consoles:[],
-
-  debts:0
-
- };
-
- $("log").innerHTML="";
-
- $("bankruptcyModal")
-  .classList.remove("open");
-
- log(
-  "🏢 Compañía fundada en 1972 con $10,000.",
-  "good"
- );
-
- render();
-
- startClock();
-
-}
-
-
-/* =========================================================
-   RENDER
-========================================================= */
-
-function render(){
-
- if(!$("year")) return;
-
-
- $("year").textContent=
-  game.year;
-
- $("day").textContent=
-  game.day+"/365";
-
- $("money").textContent=
-  money(game.money);
-
- $("money").className=
-  game.money<0
-  ?"debt"
-  :"";
-
- $("fans").textContent=
-  game.reputation;
-
- $("sales").textContent=
-  game.sales;
-
-
- /*
-    Progreso 1972 → 2026.
- */
-
- const timelineProgress=
-  clamp(
-   (
-    (game.year-1972)+
-    ((game.day-1)/365)
-   )/
-   54*
-   100,
-   0,
-   100
-  );
-
- $("timeline").style.width=
-  timelineProgress+"%";
-
-
- /*
-    Reloj:
-    exactamente 10 minutos por año.
- */
-
- const secondsLeft=
-  Math.max(
-   0,
-   Math.ceil(
-    (
-     365-game.day+
-     1
-    )*
-    (600/365)
-   )
-  );
-
- const minutes=
-  Math.floor(
-   secondsLeft/60
-  );
-
- const seconds=
-  secondsLeft%60;
-
- $("clock").textContent=
-  String(minutes).padStart(2,"0")+
-  ":"+
-  String(seconds).padStart(2,"0");
-
-
- const currentEra=
-  era();
-
- $("eraTitle").textContent=
-  currentEra[2];
-
-
- const news=
-  HISTORY.find(
-   x=>x[0]===game.year
-  );
-
-
- if(news){
-
-  $("eraDescription").textContent=
-   news[2];
-
-  $("currentNews").innerHTML=`
-
-  <b>${news[1]}</b>
-
-  <p class="small">
-  ${news[2]}
-  </p>
-
-  `;
-
- }
-
-
- const q=
-  quality();
-
- const t=
-  target();
-
-
- /*
-    STATUS
- */
-
- let debtWarning="";
-
- if(game.money<0){
-
-  debtWarning=`
-
-  <div class="warningBox">
-  ⚠️ Estás en deuda:
-  <b>${money(game.money)}</b>
-  <br>
-  Límite:
-  <b>-$10,000</b>
   </div>
 
-  `;
+  <button
+    class="mobile-button blue"
+    onclick="abrirEntrenador()">
 
- }
+    🧠 Crear mi IA
 
+    <small>
+      Crea clases y toma ejemplos
+    </small>
 
- $("status").innerHTML=`
+  </button>
 
- ${debtWarning}
+  <button
+    class="mobile-button green"
+    onclick="abrirPrueba()">
 
- <div class="row">
- <span>Consola</span>
- <b>${game.design.name}</b>
- </div>
+    🎯 Probar mi IA
 
- <div class="row">
- <span>Prototipo</span>
- <b>${game.design.progress}%</b>
- </div>
+    <small>
+      Reconoce objetos con tu cámara
+    </small>
 
- <div class="bar">
- <i style="width:${game.design.progress}%"></i>
- </div>
+  </button>
 
- <div class="row">
- <span>Calidad técnica</span>
- <b>${q}</b>
- </div>
+  <button
+    class="mobile-button purple"
+    onclick="abrirRaise()">
 
- <div class="row">
- <span>Objetivo del año</span>
- <b>${t}</b>
- </div>
+    🧩 RAISE Playground
 
- <div class="bar">
- <i style="width:${clamp(q/t*100,0,100)}%"></i>
- </div>
+    <small>
+      Preparar mis datos para RAISE
+    </small>
 
- <br>
+  </button>
 
- <button onclick="buildPrototype()">
- 🔧 Construir prototipo
- </button>
+  <button
+    class="mobile-button gray"
+    onclick="cargarGuardado()">
 
- <button onclick="testPrototype()">
- 🧪 Probar consola
- </button>
+    💾 Modelo guardado
 
- <button onclick="manufacture()">
- 🏭 Fabricar y vender
- </button>
+    <small>
+      Abrir una IA guardada
+    </small>
 
- <button onclick="showNews()">
- 📰 Noticias
- </button>
+  </button>
 
- <button onclick="nextDay()">
- 📅 Siguiente día
- </button>
+</section>
 
- <button onclick="saveGame()">
- 💾 Guardar
- </button>
+<!-- =====================================================
+     ENTRENADOR
+===================================================== -->
 
- <button onclick="resetGame()">
- 🗑️ Reiniciar
- </button>
+<section
+  id="pageTrainer"
+  class="mobile-page hidden">
 
- `;
+  <button
+    class="back"
+    onclick="volverHome()">
 
+    ← Inicio
 
- /* =======================================================
-    COMPONENTES
- ======================================================= */
-
- $("components").innerHTML="";
-
- for(const k in TECH){
-
-  let html=`
+  </button>
 
   <div class="card">
 
-  <h3>
-  ${NAMES[k][0]}
-  </h3>
+    <h2>
+      🧠 Crear IA
+    </h2>
 
-  <p class="small">
-  ${NAMES[k][1]}
-  </p>
+    <p style="color:#aeb6c2">
 
-  `;
+      Crea una clase para cada objeto.
 
+      <br><br>
 
-  TECH[k].forEach(
-   (tech,i)=>{
+      Ejemplo:
 
-    const active=
-     game.levels[k]===i;
+      <b>Botella</b>,
+      <b>Lápiz</b>,
+      <b>Teléfono</b>.
 
-    const owned=
-     game.levels[k]>i;
+    </p>
 
-    const available=
-     game.year>=tech[1];
+    <input
+      id="className"
+      class="input"
+      placeholder="Nombre del objeto..."
+      maxlength="30"
+    >
 
-    const researchedNow=
-     researched(k,i);
+    <button
+      class="mobile-button blue"
+      onclick="crearClase()">
 
+      ➕ Crear clase
 
-    html+=`
+    </button>
 
-    <div style="
-     margin:7px 0;
-     padding:8px;
-     border:1px solid
-     ${active?
-      "#58a6ff":
-      "#ffffff0b"};
-     border-radius:9px
-    ">
+  </div>
 
-    <div class="row">
+  <div
+    id="classesCard"
+    class="card hidden">
 
-    <b>
-    ${tech[0]}
-    </b>
+    <h2>
+      📚 Mis clases
+    </h2>
 
-    <span class="tag">
-    ${tech[1]}
-    </span>
+    <div id="classList"></div>
+
+  </div>
+
+  <!-- =================================================
+       CÁMARA + CONTROLES
+  ================================================== -->
+
+  <div
+    id="captureCard"
+    class="card hidden">
+
+    <h2>
+      📸 Añadir ejemplos
+    </h2>
+
+    <div class="camera-layout">
+
+      <!-- CÁMARA -->
+
+      <div>
+
+        <div class="camera-app">
+
+          <video
+            id="video"
+            autoplay
+            muted
+            playsinline>
+          </video>
+
+          <div
+            id="cameraPlaceholder"
+            class="camera-placeholder">
+
+            📷<br><br>
+            Pulsa "Abrir cámara"
+
+          </div>
+
+          <div class="camera-top">
+
+            <div class="camera-pill">
+
+              🧠
+
+              <span id="currentClass">
+                Sin clase
+              </span>
+
+            </div>
+
+            <div
+              class="camera-pill"
+              id="captureCounter">
+
+              0 ejemplos
+
+            </div>
+
+          </div>
+
+          <div class="camera-controls">
+
+            <button
+              class="camera-small"
+              onclick="girarCamaraEntrenamiento()"
+              title="Girar cámara">
+
+              🔄
+
+            </button>
+
+            <button
+              class="camera-capture"
+              onclick="capturarEjemplo()"
+              title="Capturar">
+
+              📸
+
+            </button>
+
+            <button
+              id="burstButton"
+              class="camera-small"
+              onclick="capturarRafaga()"
+              title="Capturar 10">
+
+              ⚡
+
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- CONTROLES DERECHA -->
+
+      <div class="camera-side">
+
+        <div class="camera-side-title">
+          🎥 Controles
+        </div>
+
+        <div class="camera-side-text">
+
+          Selecciona una clase y muestra
+          el objeto frente a la cámara.
+
+          <br><br>
+
+          Toma ejemplos desde diferentes
+          ángulos, distancias y posiciones.
+
+        </div>
+
+        <div class="camera-actions">
+
+          <button
+            class="mobile-button blue"
+            onclick="abrirCamaraEntrenamiento()">
+
+            📷 Abrir cámara
+
+          </button>
+
+          <button
+            class="mobile-button red"
+            onclick="detenerCamara()">
+
+            ⏹ Cerrar cámara
+
+          </button>
+
+          <button
+            class="mobile-button gray"
+            onclick="capturarRafaga()">
+
+            ⚡ Capturar 10
+
+          </button>
+
+        </div>
+
+      </div>
 
     </div>
 
-    <div class="small">
+  </div>
 
-    I+D:
-    ${money(
-     Math.max(
-      150,
-      Math.round(
-       tech[2]*.25
-      )
-     )
-    )}
+  <!-- ENTRENAMIENTO -->
 
-    · Hardware:
-    ${money(tech[2])}
+  <div
+    id="trainCard"
+    class="card hidden">
+
+    <h2>
+      🚀 Entrenar
+    </h2>
+
+    <p style="color:#aeb6c2">
+
+      Cuando tengas ejemplos en todas las clases,
+      entrena tu IA.
+
+    </p>
+
+    <div
+      id="dataSummary"
+      style="
+      color:#aaa;
+      margin:10px 0;
+      ">
 
     </div>
 
     <button
+      class="mobile-button green"
+      onclick="entrenarModelo()">
 
-    ${
-     active||
-     owned||
-     !available||
-     !researchedNow||
-     bankrupt
-     ?"disabled":""
-    }
-
-    onclick="
-    install('${k}',${i})
-    ">
-
-    ${
-     active
-     ?"ACTIVO"
-     :
-     owned
-     ?"SUPERADO"
-     :
-     !available
-     ?"AÚN NO EXISTE"
-     :
-     !researchedNow
-     ?"INVESTIGA PRIMERO"
-     :
-     "INSTALAR"
-    }
+      🧠 ENTRENAR IA
 
     </button>
 
+  </div>
+
+</section>
+
+<!-- =====================================================
+     ENTRENANDO
+===================================================== -->
+
+<section
+  id="pageTraining"
+  class="mobile-page hidden">
+
+  <div class="card">
+
+    <div class="training-title">
+
+      <h2>
+        🧠 Entrenando...
+      </h2>
+
+      <p
+        id="trainingStatus"
+        style="color:#aaa">
+
+        Preparando IA...
+
+      </p>
+
     </div>
 
-    `;
+    <div
+      class="epoch"
+      id="epoch">
 
-   }
-  );
+      0%
 
+    </div>
 
-  html+="</div>";
+    <div class="progress">
 
-  $("components").innerHTML+=
-   html;
+      <div
+        id="trainingProgress"
+        class="progress-bar">
 
- }
+      </div>
 
+    </div>
 
- /* =======================================================
-    INVESTIGACIÓN
- ======================================================= */
+    <div
+      id="trainingLog"
+      class="training-log">
 
- $("researchCards").innerHTML="";
+    </div>
 
- for(const k in TECH){
+  </div>
 
-  TECH[k].forEach(
-   (tech,i)=>{
+</section>
 
-    if(i===0)return;
+<!-- =====================================================
+     PRUEBA
+===================================================== -->
 
-    const cost=
-     Math.max(
-      150,
-      Math.round(
-       tech[2]*.25
-      )
-     );
+<section
+  id="pageTest"
+  class="mobile-page hidden">
 
-    const done=
-     researched(k,i);
+  <button
+    class="back"
+    onclick="volverHome()">
 
-    const available=
-     game.year>=tech[1];
+    ← Inicio
 
-    $("researchCards").innerHTML+=`
+  </button>
 
-    <div class="card">
+  <div class="card">
 
-    <h3>
-    🔬 ${tech[0]}
-    </h3>
+    <h2>
+      🎯 Probar mi IA
+    </h2>
 
-    <p class="small">
-    ${NAMES[k][0]}
-    · Disponible en ${tech[1]}
-    </p>
+    <div class="recognition-camera">
 
-    <b>
-    ${money(cost)}
-    </b>
+      <video
+        id="testVideo"
+        autoplay
+        muted
+        playsinline>
+      </video>
 
-    <br>
+      <div
+        id="testPlaceholder"
+        class="camera-placeholder">
+
+        🎯<br><br>
+        Pulsa iniciar reconocimiento
+
+      </div>
+
+      <div class="recognition-overlay"></div>
+
+      <div class="recognition-top">
+
+        <div class="recognition-pill">
+          🧠 IA-Objetos
+        </div>
+
+        <div
+          class="recognition-pill"
+          id="liveCameraLabel">
+
+          📷
+
+        </div>
+
+      </div>
+
+      <div class="recognition-controls">
+
+        <button
+          class="camera-small"
+          onclick="cambiarCamaraPrueba()">
+
+          🔄
+
+        </button>
+
+        <button
+          class="camera-capture"
+          onclick="iniciarPrueba()">
+
+          ▶️
+
+        </button>
+
+        <button
+          class="camera-small"
+          onclick="detenerPrueba()">
+
+          ⏹
+
+        </button>
+
+      </div>
+
+    </div>
+
+    <div class="result">
+
+      <div class="result-label">
+        Objeto detectado
+      </div>
+
+      <div
+        id="resultName"
+        class="result-name">
+
+        Esperando...
+
+      </div>
+
+      <div
+        id="resultConfidence"
+        class="result-confidence">
+
+        0%
+
+      </div>
+
+    </div>
+
+    <div id="predictions"></div>
 
     <button
+      class="mobile-button blue"
+      onclick="iniciarPrueba()">
 
-    ${
-     done||
-     !available||
-     bankrupt
-     ?"disabled":""
-    }
-
-    onclick="
-    research('${k}',${i})
-    ">
-
-    ${
-     done
-     ?"✓ INVESTIGADO"
-     :
-     !available
-     ?"🔒 BLOQUEADO"
-     :
-     "INVESTIGAR"
-    }
+      📷 Iniciar reconocimiento
 
     </button>
 
+    <button
+      class="mobile-button gray"
+      onclick="cambiarCamaraPrueba()">
+
+      🔄 Cambiar cámara
+
+    </button>
+
+    <button
+      class="mobile-button red"
+      onclick="detenerPrueba()">
+
+      ⏹ Detener
+
+    </button>
+
+  </div>
+
+  <div
+    id="testStatus"
+    class="status">
+
+    Sin modelo cargado.
+
+  </div>
+
+</section>
+
+<!-- =====================================================
+     RAISE
+===================================================== -->
+
+<section
+  id="pageRaise"
+  class="mobile-page hidden">
+
+  <button
+    class="back"
+    onclick="volverHome()">
+
+    ← Inicio
+
+  </button>
+
+  <div class="card raise-card">
+
+    <div class="raise-icon">
+      🧩
     </div>
 
-    `;
-
-   }
-  );
-
- }
-
-
- /* =======================================================
-    ECONOMÍA
- ======================================================= */
-
- $("marketCards").innerHTML=`
-
- <div class="card">
-
- <h3>💰 Dinero</h3>
-
- <b class="${game.money<0?"debt":""}">
- ${money(game.money)}
- </b>
-
- <p class="small">
- Coste diario:
- ${money(dailyCost())}
- </p>
-
- </div>
-
-
- <div class="card">
-
- <h3>📈 Reputación</h3>
-
- <b>
- ${game.reputation}
- </b>
-
- </div>
-
-
- <div class="card">
-
- <h3>🏭 Ventas</h3>
-
- <b>
- ${game.sales}
- </b>
-
- </div>
-
-
- <div class="card">
-
- <h3>🏦 Deuda actual</h3>
-
- <b class="${game.money<0?"debt":""}">
- ${
-  game.money<0
-  ?money(game.money)
-  :"$0"
- }
- </b>
-
- <p class="small">
- Puedes llegar hasta -$10,000.
- </p>
-
- </div>
-
- `;
-
-
- $("economy").innerHTML=`
-
- <p>
- <b>Ingresos:</b>
- ${money(game.revenue)}
- </p>
-
- <p>
- <b>Gastos:</b>
- ${money(game.expenses)}
- </p>
-
- <p>
- <b>Balance histórico:</b>
- ${money(
-  game.revenue-
-  game.expenses
- )}
- </p>
-
- <p>
- <b>Dinero actual:</b>
- <span class="${game.money<0?"debt":""}">
- ${money(game.money)}
- </span>
- </p>
-
- <p class="small">
- El dinero actual no se reinicia automáticamente.
- Los gastos solamente se descuentan cuando
- realmente ocurre una operación.
- </p>
-
- `;
-
-
- /* =======================================================
-    HISTORIAL
- ======================================================= */
-
- if(game.consoles.length){
-
-  $("historyList").innerHTML=
-   game.consoles.map(
-    c=>`
-
-    <div class="card"
-    style="margin-bottom:8px">
-
-    <div class="row">
-
-    <b>
-    ${c.year}
-    · Día ${c.day}
-    · ${c.name}
-    </b>
-
-    <b>
-    ⭐ ${c.rating}/100
-    </b>
-
+    <div class="raise-title">
+      RAISE Playground
     </div>
 
-    <p class="small">
+    <p class="raise-description">
 
-    Calidad:
-    ${c.quality}
-
-    · Producción:
-    ${money(c.cost)}
-
-    · Ingresos:
-    ${money(c.revenue)}
+      Exporta tus clases, fotografías y modelo
+      para preparar un proyecto compatible
+      con herramientas de clasificación.
 
     </p>
 
+    <div
+      id="raiseStatus"
+      class="raise-status">
+
+      Comprobando tus datos...
+
     </div>
 
-    `
-   ).join("");
+    <button
+      id="exportRaiseButton"
+      class="mobile-button purple"
+      onclick="exportarParaRaise()">
 
- }else{
+      📦 EXPORTAR PARA RAISE
 
-  $("historyList").innerHTML=
-   `<p class="small">
-   Todavía no has fabricado ninguna consola.
-   </p>`;
+      <small>
+        Crear ZIP completo
+      </small>
 
- }
+    </button>
+
+    <button
+      class="mobile-button blue"
+      onclick="abrirRaisePlayground()">
+
+      🌐 ABRIR RAISE PLAYGROUND
+
+      <small>
+        Abrir la plataforma oficial
+      </small>
+
+    </button>
+
+    <button
+      class="mobile-button gray"
+      onclick="mostrarPagina('pageTrainer')">
+
+      ← Volver al entrenamiento
+
+    </button>
+
+    <div class="export-info">
+
+      El ZIP contiene:
+
+      <br><br>
+
+      • Imágenes originales<br>
+      • Carpetas por clase<br>
+      • labels.txt<br>
+      • dataset.json<br>
+      • Información del proyecto<br>
+      • Modelo TensorFlow.js cuando existe<br>
+      • Configuración para RAISE<br>
+      • Archivo con la URL de IA-Objetos
+
+      <br><br>
+
+      <b>Importante:</b> el ZIP prepara los datos y el
+      modelo web, pero una URL de GitHub Pages debe
+      existir para que otros dispositivos puedan
+      acceder al modelo.
+
+    </div>
+
+  </div>
+
+</section>
+
+</div>
+
+<script>
+
+/* =====================================================
+   VARIABLES
+===================================================== */
+
+let mobileNet = null;
+let classifier = null;
+
+let classes = [];
+let trainingData = [];
+let trainingImages = [];
+
+let currentClass = null;
+
+let cameraStream = null;
+let testStream = null;
+
+let testRunning = false;
+let recognitionFrame = null;
+
+let trainingFacingMode = "environment";
+let testFacingMode = "environment";
+
+const RAISE_PLAYGROUND_URL =
+  "https://playground.raise.mit.edu/";
+
+/*
+   Pon aquí la URL de GitHub Pages de tu proyecto
+   cuando lo publiques.
+
+   Ejemplo:
+
+   https://usuario.github.io/IA-Objetos/
+*/
+
+const IA_OBJETOS_URL =
+  window.location.href.split("#")[0];
 
 
- $("screenText").textContent=
-  game.design.name;
+/* =====================================================
+   NAVEGACIÓN
+===================================================== */
 
+function entrarMovil() {
 
- /*
-    Desactivar operaciones si quebró.
- */
+  document.getElementById("desktop")
+    .style.display = "none";
 
- if(bankrupt){
+  document.getElementById("mobile")
+    .style.display = "block";
+
+  mostrarPagina("pageHome");
+}
+
+function salirMovil() {
+
+  detenerCamara();
+  detenerPrueba();
+
+  document.getElementById("mobile")
+    .style.display = "none";
+
+  document.getElementById("desktop")
+    .style.display = "block";
+}
+
+function mostrarPagina(id) {
 
   document
-   .querySelectorAll(
-    "button:not(#bankruptcyModal button)"
-   )
-   .forEach(
-    button=>{
+    .querySelectorAll(".mobile-page")
+    .forEach(page => {
+      page.classList.add("hidden");
+    });
 
-     if(
-      !button.closest(".modal")
-     ){
+  const page =
+    document.getElementById(id);
 
-      /*
-         Dejamos disponible reset.
-      */
+  if (page) {
+    page.classList.remove("hidden");
+  }
+}
 
-      if(
-       !button.innerText.includes("Reiniciar")
-      ){
+function volverHome() {
 
-       button.disabled=true;
+  detenerCamara();
+  detenerPrueba();
 
-      }
+  mostrarPagina("pageHome");
+}
 
-     }
+function abrirEntrenador() {
 
-    }
-   );
+  mostrarPagina("pageTrainer");
 
- }
+  actualizarInterfazClases();
+}
 
+function abrirPrueba() {
+
+  mostrarPagina("pageTest");
+
+  if (!classifier) {
+
+    document.getElementById("testStatus")
+      .textContent =
+      "⚠️ Primero crea y entrena una IA.";
+  }
+}
+
+function abrirRaise() {
+
+  detenerCamara();
+  detenerPrueba();
+
+  mostrarPagina("pageRaise");
+
+  actualizarEstadoRaise();
 }
 
 
-/* =========================================================
-   TABS
-   BUG ORIGINAL CORREGIDO
-========================================================= */
+/* =====================================================
+   BOTONES PRINCIPALES
+===================================================== */
 
-function setupTabs(){
+function crearIA() {
 
- const navButtons=
-  document.querySelectorAll(
-   "#mainNav button"
+  entrarMovil();
+  abrirEntrenador();
+}
+
+function abrirModelo() {
+
+  entrarMovil();
+  cargarGuardado();
+}
+
+
+/* =====================================================
+   MOBILENET
+===================================================== */
+
+async function cargarMobileNet() {
+
+  if (mobileNet) {
+    return;
+  }
+
+  const status =
+    document.getElementById("trainingStatus");
+
+  if (status) {
+
+    status.textContent =
+      "⏳ Cargando cerebro base de IA...";
+  }
+
+  mobileNet =
+    await mobilenet.load({
+      version: 1,
+      alpha: 0.25
+    });
+
+  if (status) {
+
+    status.textContent =
+      "✅ Cerebro base listo.";
+  }
+}
+
+
+/* =====================================================
+   CREAR CLASE
+===================================================== */
+
+async function crearClase() {
+
+  const input =
+    document.getElementById("className");
+
+  const name =
+    input.value.trim();
+
+  if (!name) {
+
+    alert(
+      "Escribe un nombre para la clase."
+    );
+
+    return;
+  }
+
+  if (
+    classes.some(
+      c =>
+        c.name.toLowerCase() ===
+        name.toLowerCase()
+    )
+  ) {
+
+    alert(
+      "Esa clase ya existe."
+    );
+
+    return;
+  }
+
+  classes.push({
+    id: Date.now(),
+    name: name,
+    count: 0
+  });
+
+  trainingData.push([]);
+  trainingImages.push([]);
+
+  input.value = "";
+
+  guardarDatosBasicos();
+
+  actualizarInterfazClases();
+
+  seleccionarClase(
+    classes.length - 1
   );
-
- const tabs=
-  document.querySelectorAll(
-   ".tab"
-  );
+}
 
 
- navButtons.forEach(
-  button=>{
+/* =====================================================
+   ACTUALIZAR CLASES
+===================================================== */
 
-   button.addEventListener(
-    "click",
-    ()=>{
+function actualizarInterfazClases() {
 
-     if(bankrupt){
+  const card =
+    document.getElementById("classesCard");
 
-      return;
+  const list =
+    document.getElementById("classList");
 
-     }
+  if (classes.length === 0) {
 
-     navButtons.forEach(
-      b=>
-       b.classList.remove(
-        "active"
-       )
-     );
+    card.classList.add("hidden");
 
-     button.classList.add(
-      "active"
-     );
+    return;
+  }
 
+  card.classList.remove("hidden");
 
-     tabs.forEach(
-      tab=>{
-       tab.style.display=
-        "none";
-      }
-     );
+  list.innerHTML = "";
 
+  classes.forEach(
+    (item, index) => {
 
-     const targetTab=
-      document.getElementById(
-       button.dataset.tab
+      const div =
+        document.createElement("div");
+
+      div.className =
+        "class-item";
+
+      div.innerHTML = `
+
+        <div class="class-color"></div>
+
+        <div class="class-info">
+
+          <div class="class-name">
+            ${escapeHTML(item.name)}
+          </div>
+
+          <div class="class-count">
+            ${item.count} ejemplos
+          </div>
+
+        </div>
+
+        <button
+          class="delete-class"
+          onclick="eliminarClase(${index})">
+
+          🗑️
+
+        </button>
+      `;
+
+      div.addEventListener(
+        "click",
+        function(event) {
+
+          if (
+            event.target.closest("button")
+          ) {
+            return;
+          }
+
+          seleccionarClase(index);
+        }
       );
 
-
-     if(targetTab){
-
-      targetTab.style.display=
-       "block";
-
-     }
-
+      list.appendChild(div);
     }
-   );
-
-  }
- );
-
-}
-
-
-/* =========================================================
-   RELOJ PRINCIPAL
-========================================================= */
-
-let dayTimer=null;
-
-function startClock(){
-
- if(dayTimer){
-
-  clearInterval(dayTimer);
-
- }
-
- /*
-    600000 ms = 10 minutos
-    365 días por año
-
-    600000 / 365 =
-    ~1643.8 ms por día
- */
-
- const DAY_DURATION=
-  600000/365;
-
- dayTimer=
-  setInterval(
-   ()=>{
-    nextDay();
-   },
-   DAY_DURATION
   );
 
+  actualizarResumen();
 }
 
 
-/* =========================================================
-   GUARDADO AUTOMÁTICO
-========================================================= */
+/* =====================================================
+   SELECCIONAR CLASE
+===================================================== */
 
-setInterval(
- ()=>{
+function seleccionarClase(index) {
 
-  if(!bankrupt){
-
-   localStorage.setItem(
-    "consoleFactorySave",
-    JSON.stringify(game)
-   );
-
+  if (
+    index < 0 ||
+    index >= classes.length
+  ) {
+    return;
   }
 
- },
- 20000
+  currentClass = index;
+
+  document.getElementById("captureCard")
+    .classList.remove("hidden");
+
+  document.getElementById("currentClass")
+    .textContent =
+    classes[index].name;
+
+  document.getElementById("captureCounter")
+    .textContent =
+    classes[index].count +
+    " ejemplos";
+
+  actualizarResumen();
+}
+
+
+/* =====================================================
+   ELIMINAR CLASE
+===================================================== */
+
+function eliminarClase(index) {
+
+  detenerCamara();
+
+  if (
+    index < 0 ||
+    index >= classes.length
+  ) {
+    return;
+  }
+
+  classes.splice(index, 1);
+  trainingData.splice(index, 1);
+  trainingImages.splice(index, 1);
+
+  currentClass = null;
+
+  document.getElementById("captureCard")
+    .classList.add("hidden");
+
+  actualizarInterfazClases();
+
+  guardarDatosBasicos();
+}
+
+
+/* =====================================================
+   ABRIR CÁMARA
+===================================================== */
+
+async function abrirCamaraEntrenamiento() {
+
+  if (currentClass === null) {
+
+    alert(
+      "Selecciona una clase primero."
+    );
+
+    return;
+  }
+
+  if (
+    !navigator.mediaDevices ||
+    !navigator.mediaDevices.getUserMedia
+  ) {
+
+    alert(
+      "Tu navegador no permite usar la cámara aquí. Abre IA-Objetos mediante HTTPS."
+    );
+
+    return;
+  }
+
+  try {
+
+    detenerCamara();
+
+    cameraStream =
+      await navigator.mediaDevices
+        .getUserMedia({
+
+          video: {
+
+            facingMode:
+              trainingFacingMode,
+
+            width: {
+              ideal: 640
+            },
+
+            height: {
+              ideal: 480
+            }
+
+          },
+
+          audio: false
+
+        });
+
+    const video =
+      document.getElementById("video");
+
+    video.srcObject =
+      cameraStream;
+
+    video.style.display =
+      "block";
+
+    document.getElementById(
+      "cameraPlaceholder"
+    ).style.display =
+      "none";
+
+    video.muted = true;
+
+    video.setAttribute(
+      "playsinline",
+      ""
+    );
+
+    await video.play();
+
+  } catch(error) {
+
+    console.error(error);
+
+    cameraStream = null;
+
+    alert(
+      "No se pudo abrir la cámara.\n\n" +
+      error.message
+    );
+  }
+}
+
+
+/* =====================================================
+   GIRAR CÁMARA
+===================================================== */
+
+async function girarCamaraEntrenamiento() {
+
+  trainingFacingMode =
+    trainingFacingMode === "environment"
+      ? "user"
+      : "environment";
+
+  if (cameraStream) {
+    await abrirCamaraEntrenamiento();
+  }
+}
+
+
+/* =====================================================
+   CAPTURAR EJEMPLO
+===================================================== */
+
+async function capturarEjemplo() {
+
+  if (currentClass === null) {
+
+    alert(
+      "Selecciona una clase."
+    );
+
+    return false;
+  }
+
+  const video =
+    document.getElementById("video");
+
+  if (
+    !cameraStream ||
+    video.readyState < 2
+  ) {
+
+    alert(
+      "Primero abre la cámara."
+    );
+
+    return false;
+  }
+
+  try {
+
+    await cargarMobileNet();
+
+    const embedding =
+      mobileNet.infer(
+        video,
+        true
+      );
+
+    const data =
+      await embedding.array();
+
+    embedding.dispose();
+
+    trainingData[currentClass]
+      .push(data[0]);
+
+    const imageBlob =
+      await capturarFrameComoBlob(video);
+
+    if (imageBlob) {
+
+      trainingImages[currentClass]
+        .push(imageBlob);
+    }
+
+    classes[currentClass].count =
+      trainingData[currentClass].length;
+
+    document.getElementById(
+      "captureCounter"
+    ).textContent =
+      classes[currentClass].count +
+      " ejemplos";
+
+    actualizarInterfazClases();
+
+    vibrar();
+
+    actualizarEstadoRaise();
+
+    return true;
+
+  } catch(error) {
+
+    console.error(error);
+
+    alert(
+      "Error capturando ejemplo:\n" +
+      error.message
+    );
+
+    return false;
+  }
+}
+
+
+/* =====================================================
+   CAPTURAR FOTO
+===================================================== */
+
+async function capturarFrameComoBlob(video) {
+
+  try {
+
+    const canvas =
+      document.createElement("canvas");
+
+    const maxSize = 640;
+
+    let width =
+      video.videoWidth || 640;
+
+    let height =
+      video.videoHeight || 480;
+
+    if (width > maxSize) {
+
+      const ratio =
+        maxSize / width;
+
+      width =
+        Math.round(width * ratio);
+
+      height =
+        Math.round(height * ratio);
+    }
+
+    canvas.width = width;
+    canvas.height = height;
+
+    const ctx =
+      canvas.getContext("2d");
+
+    ctx.drawImage(
+      video,
+      0,
+      0,
+      width,
+      height
+    );
+
+    return await new Promise(
+      resolve => {
+
+        canvas.toBlob(
+          blob => resolve(blob),
+          "image/jpeg",
+          0.88
+        );
+      }
+    );
+
+  } catch(error) {
+
+    console.error(
+      "Error creando imagen:",
+      error
+    );
+
+    return null;
+  }
+}
+
+
+/* =====================================================
+   RÁFAGA
+===================================================== */
+
+async function capturarRafaga() {
+
+  if (currentClass === null) {
+
+    alert(
+      "Selecciona una clase."
+    );
+
+    return;
+  }
+
+  const video =
+    document.getElementById("video");
+
+  if (
+    !cameraStream ||
+    video.readyState < 2
+  ) {
+
+    alert(
+      "Primero abre la cámara."
+    );
+
+    return;
+  }
+
+  const buttons =
+    document.querySelectorAll(
+      "#burstButton"
+    );
+
+  buttons.forEach(
+    button =>
+      button.disabled = true
+  );
+
+  try {
+
+    for (
+      let i = 0;
+      i < 10;
+      i++
+    ) {
+
+      const success =
+        await capturarEjemplo();
+
+      if (!success) {
+        break;
+      }
+
+      await sleep(150);
+    }
+
+  } finally {
+
+    buttons.forEach(
+      button =>
+        button.disabled = false
+    );
+  }
+}
+
+
+/* =====================================================
+   ENTRENAR
+===================================================== */
+
+async function entrenarModelo() {
+
+  if (classes.length < 2) {
+
+    alert(
+      "Necesitas al menos 2 clases."
+    );
+
+    return;
+  }
+
+  for (
+    let i = 0;
+    i < classes.length;
+    i++
+  ) {
+
+    if (
+      trainingData[i].length < 2
+    ) {
+
+      alert(
+        "La clase \"" +
+        classes[i].name +
+        "\" necesita al menos 2 ejemplos."
+      );
+
+      return;
+    }
+  }
+
+  detenerCamara();
+
+  mostrarPagina("pageTraining");
+
+  document.getElementById(
+    "trainingProgress"
+  ).style.width = "0%";
+
+  document.getElementById(
+    "epoch"
+  ).textContent = "0%";
+
+  try {
+
+    await cargarMobileNet();
+
+    const xsArray = [];
+    const ysArray = [];
+
+    for (
+      let classIndex = 0;
+      classIndex < trainingData.length;
+      classIndex++
+    ) {
+
+      for (
+        const embedding
+        of trainingData[classIndex]
+      ) {
+
+        xsArray.push(embedding);
+
+        const label =
+          new Array(
+            classes.length
+          ).fill(0);
+
+        label[classIndex] = 1;
+
+        ysArray.push(label);
+      }
+    }
+
+    const xs =
+      tf.tensor2d(xsArray);
+
+    const ys =
+      tf.tensor2d(ysArray);
+
+    const embeddingSize =
+      xs.shape[1];
+
+    if (classifier) {
+
+      classifier.dispose();
+      classifier = null;
+    }
+
+    classifier =
+      tf.sequential({
+
+        layers: [
+
+          tf.layers.dense({
+
+            inputShape:
+              [embeddingSize],
+
+            units: 128,
+
+            activation:
+              "relu"
+
+          }),
+
+          tf.layers.dropout({
+            rate: .2
+          }),
+
+          tf.layers.dense({
+
+            units:
+              classes.length,
+
+            activation:
+              "softmax"
+
+          })
+
+        ]
+
+      });
+
+    classifier.compile({
+
+      optimizer:
+        tf.train.adam(.001),
+
+      loss:
+        "categoricalCrossentropy",
+
+      metrics:
+        ["accuracy"]
+
+    });
+
+    const epochs = 25;
+
+    const log =
+      document.getElementById(
+        "trainingLog"
+      );
+
+    log.innerHTML = "";
+
+    await classifier.fit(
+      xs,
+      ys,
+      {
+
+        epochs: epochs,
+
+        batchSize:
+          Math.min(
+            16,
+            xs.shape[0]
+          ),
+
+        shuffle: true,
+
+        callbacks: {
+
+          onEpochEnd:
+            async (
+              epoch,
+              logs
+            ) => {
+
+              const percent =
+                Math.round(
+                  (
+                    (epoch + 1) /
+                    epochs
+                  ) * 100
+                );
+
+              document.getElementById(
+                "trainingProgress"
+              ).style.width =
+                percent + "%";
+
+              document.getElementById(
+                "epoch"
+              ).textContent =
+                percent + "%";
+
+              let accuracy =
+                logs.accuracy;
+
+              if (
+                accuracy === undefined
+              ) {
+                accuracy = logs.acc;
+              }
+
+              if (
+                accuracy === undefined
+              ) {
+                accuracy = 0;
+              }
+
+              log.innerHTML +=
+                "Época " +
+                (epoch + 1) +
+                " — pérdida: " +
+                Number(logs.loss).toFixed(4) +
+                " — precisión: " +
+                Number(accuracy).toFixed(3) +
+                "<br>";
+
+              log.scrollTop =
+                log.scrollHeight;
+
+              await tf.nextFrame();
+            }
+        }
+      }
+    );
+
+    xs.dispose();
+    ys.dispose();
+
+    await guardarModelo();
+
+    document.getElementById(
+      "trainingStatus"
+    ).textContent =
+      "✅ ¡Tu IA está lista!";
+
+    actualizarEstadoRaise();
+
+    await sleep(800);
+
+    mostrarPagina("pageTest");
+
+    document.getElementById(
+      "testStatus"
+    ).textContent =
+      "✅ Modelo entrenado correctamente.";
+
+  } catch(error) {
+
+    console.error(error);
+
+    document.getElementById(
+      "trainingStatus"
+    ).textContent =
+      "❌ Error durante el entrenamiento";
+
+    document.getElementById(
+      "trainingLog"
+    ).innerHTML +=
+      "<br>ERROR: " +
+      escapeHTML(
+        error.message
+      );
+  }
+}
+
+
+/* =====================================================
+   GUARDAR MODELO
+===================================================== */
+
+async function guardarModelo() {
+
+  if (!classifier) {
+    return;
+  }
+
+  try {
+
+    await classifier.save(
+      "indexeddb://ia-objetos-model"
+    );
+
+    localStorage.setItem(
+      "iaObjetosClasses",
+      JSON.stringify(
+        classes.map(
+          c => c.name
+        )
+      )
+    );
+
+  } catch(error) {
+
+    console.error(
+      "Error guardando modelo:",
+      error
+    );
+  }
+}
+
+
+/* =====================================================
+   CARGAR MODELO
+===================================================== */
+
+async function cargarGuardado() {
+
+  mostrarPagina("pageTest");
+
+  const status =
+    document.getElementById(
+      "testStatus"
+    );
+
+  status.textContent =
+    "⏳ Buscando modelo guardado...";
+
+  try {
+
+    classifier =
+      await tf.loadLayersModel(
+        "indexeddb://ia-objetos-model"
+      );
+
+    const saved =
+      JSON.parse(
+        localStorage.getItem(
+          "iaObjetosClasses"
+        ) || "[]"
+      );
+
+    classes =
+      saved.map(
+        name => ({
+          name: name,
+          count: 0
+        })
+      );
+
+    trainingData =
+      classes.map(
+        () => []
+      );
+
+    trainingImages =
+      classes.map(
+        () => []
+      );
+
+    status.textContent =
+      "✅ Modelo cargado. Listo para reconocer.";
+
+  } catch(error) {
+
+    console.error(error);
+
+    classifier = null;
+
+    status.textContent =
+      "⚠️ No hay un modelo guardado todavía.";
+  }
+}
+
+
+/* =====================================================
+   INICIAR RECONOCIMIENTO
+===================================================== */
+
+async function iniciarPrueba() {
+
+  if (!classifier) {
+
+    alert(
+      "Primero crea y entrena una IA."
+    );
+
+    return;
+  }
+
+  if (
+    !navigator.mediaDevices ||
+    !navigator.mediaDevices.getUserMedia
+  ) {
+
+    alert(
+      "La cámara necesita HTTPS."
+    );
+
+    return;
+  }
+
+  detenerPrueba();
+
+  try {
+
+    await cargarMobileNet();
+
+    testStream =
+      await navigator.mediaDevices
+        .getUserMedia({
+
+          video: {
+
+            facingMode:
+              testFacingMode,
+
+            width: {
+              ideal: 640
+            },
+
+            height: {
+              ideal: 480
+            }
+
+          },
+
+          audio: false
+
+        });
+
+    const video =
+      document.getElementById(
+        "testVideo"
+      );
+
+    video.srcObject =
+      testStream;
+
+    video.style.display =
+      "block";
+
+    document.getElementById(
+      "testPlaceholder"
+    ).style.display =
+      "none";
+
+    video.muted = true;
+
+    video.setAttribute(
+      "playsinline",
+      ""
+    );
+
+    await video.play();
+
+    testRunning = true;
+
+    document.getElementById(
+      "testStatus"
+    ).textContent =
+      "🟢 Reconociendo...";
+
+    reconocer();
+
+  } catch(error) {
+
+    console.error(error);
+
+    document.getElementById(
+      "testStatus"
+    ).textContent =
+      "❌ " +
+      error.message;
+  }
+}
+
+
+/* =====================================================
+   RECONOCER
+===================================================== */
+
+async function reconocer() {
+
+  if (!testRunning) {
+    return;
+  }
+
+  const video =
+    document.getElementById(
+      "testVideo"
+    );
+
+  try {
+
+    const embedding =
+      mobileNet.infer(
+        video,
+        true
+      );
+
+    const prediction =
+      classifier.predict(
+        embedding
+      );
+
+    const values =
+      await prediction.data();
+
+    embedding.dispose();
+    prediction.dispose();
+
+    let bestIndex = 0;
+
+    for (
+      let i = 1;
+      i < values.length;
+      i++
+    ) {
+
+      if (
+        values[i] >
+        values[bestIndex]
+      ) {
+
+        bestIndex = i;
+      }
+    }
+
+    const confidence =
+      values[bestIndex] * 100;
+
+    const name =
+      classes[bestIndex]?.name ||
+      "Desconocido";
+
+    document.getElementById(
+      "resultName"
+    ).textContent =
+      name;
+
+    document.getElementById(
+      "resultConfidence"
+    ).textContent =
+      confidence.toFixed(1) +
+      "% de confianza";
+
+    mostrarPredicciones(values);
+
+  } catch(error) {
+
+    console.error(
+      "Predicción:",
+      error
+    );
+  }
+
+  if (testRunning) {
+
+    recognitionFrame =
+      requestAnimationFrame(
+        reconocer
+      );
+  }
+}
+
+
+/* =====================================================
+   PREDICCIONES
+===================================================== */
+
+function mostrarPredicciones(values) {
+
+  const container =
+    document.getElementById(
+      "predictions"
+    );
+
+  container.innerHTML = "";
+
+  values.forEach(
+    (value, index) => {
+
+      const percent =
+        value * 100;
+
+      const div =
+        document.createElement(
+          "div"
+        );
+
+      div.className =
+        "prediction";
+
+      div.innerHTML = `
+
+        <div class="prediction-top">
+
+          <span>
+            ${escapeHTML(
+              classes[index]?.name ||
+              "Clase " + (index + 1)
+            )}
+          </span>
+
+          <span>
+            ${percent.toFixed(1)}%
+          </span>
+
+        </div>
+
+        <div class="prediction-track">
+
+          <div
+            class="prediction-fill"
+            style="width:${Math.min(
+              100,
+              Math.max(
+                0,
+                percent
+              )
+            )}%">
+
+          </div>
+
+        </div>
+
+      `;
+
+      container.appendChild(div);
+    }
+  );
+}
+
+
+/* =====================================================
+   CAMBIAR CÁMARA DE PRUEBA
+===================================================== */
+
+async function cambiarCamaraPrueba() {
+
+  testFacingMode =
+    testFacingMode === "environment"
+      ? "user"
+      : "environment";
+
+  if (testRunning) {
+
+    await iniciarPrueba();
+  }
+}
+
+
+/* =====================================================
+   DETENER CÁMARA
+===================================================== */
+
+function detenerCamara() {
+
+  if (cameraStream) {
+
+    cameraStream
+      .getTracks()
+      .forEach(
+        track =>
+          track.stop()
+      );
+
+    cameraStream = null;
+  }
+
+  const video =
+    document.getElementById(
+      "video"
+    );
+
+  if (video) {
+
+    video.pause();
+    video.srcObject = null;
+    video.style.display = "none";
+  }
+
+  const placeholder =
+    document.getElementById(
+      "cameraPlaceholder"
+    );
+
+  if (placeholder) {
+
+    placeholder.style.display =
+      "flex";
+  }
+}
+
+
+/* =====================================================
+   DETENER RECONOCIMIENTO
+===================================================== */
+
+function detenerPrueba() {
+
+  testRunning = false;
+
+  if (recognitionFrame) {
+
+    cancelAnimationFrame(
+      recognitionFrame
+    );
+
+    recognitionFrame = null;
+  }
+
+  if (testStream) {
+
+    testStream
+      .getTracks()
+      .forEach(
+        track =>
+          track.stop()
+      );
+
+    testStream = null;
+  }
+
+  const video =
+    document.getElementById(
+      "testVideo"
+    );
+
+  if (video) {
+
+    video.pause();
+    video.srcObject = null;
+    video.style.display = "none";
+  }
+
+  const placeholder =
+    document.getElementById(
+      "testPlaceholder"
+    );
+
+  if (placeholder) {
+
+    placeholder.style.display =
+      "flex";
+  }
+}
+
+
+/* =====================================================
+   RESUMEN
+===================================================== */
+
+function actualizarResumen() {
+
+  const card =
+    document.getElementById(
+      "trainCard"
+    );
+
+  const summary =
+    document.getElementById(
+      "dataSummary"
+    );
+
+  if (classes.length < 2) {
+
+    card.classList.add("hidden");
+
+    return;
+  }
+
+  const total =
+    trainingData.reduce(
+      (
+        sum,
+        data
+      ) =>
+        sum + data.length,
+      0
+    );
+
+  card.classList.remove("hidden");
+
+  summary.textContent =
+    classes.length +
+    " clases · " +
+    total +
+    " ejemplos";
+}
+
+
+/* =====================================================
+   ESTADO RAISE
+===================================================== */
+
+function actualizarEstadoRaise() {
+
+  const status =
+    document.getElementById(
+      "raiseStatus"
+    );
+
+  if (!status) {
+    return;
+  }
+
+  if (classes.length === 0) {
+
+    status.innerHTML =
+      "⚪ Todavía no tienes clases.";
+
+    return;
+  }
+
+  let totalImages = 0;
+
+  trainingImages.forEach(
+    images => {
+
+      totalImages +=
+        images.length;
+    }
+  );
+
+  status.innerHTML =
+    "🟢 " +
+    classes.length +
+    " clases · " +
+    totalImages +
+    " imágenes originales listas para exportar.";
+}
+
+
+/* =====================================================
+   EXPORTAR MODELO TFJS
+===================================================== */
+
+async function obtenerModeloTFJS() {
+
+  if (!classifier) {
+    return null;
+  }
+
+  let artifacts = null;
+
+  await classifier.save(
+    tf.io.withSaveHandler(
+      async modelArtifacts => {
+
+        artifacts =
+          modelArtifacts;
+
+        return {
+          modelArtifactsInfo: {
+            dateSaved:
+              new Date(),
+            modelTopologyType:
+              "JSON"
+          }
+        };
+      }
+    )
+  );
+
+  return artifacts;
+}
+
+
+/* =====================================================
+   EXPORTAR PARA RAISE
+===================================================== */
+
+async function exportarParaRaise() {
+
+  if (classes.length < 2) {
+
+    alert(
+      "Necesitas al menos 2 clases antes de exportar."
+    );
+
+    return;
+  }
+
+  let totalImages = 0;
+
+  trainingImages.forEach(
+    images => {
+
+      totalImages +=
+        images.length;
+    }
+  );
+
+  if (totalImages < 2) {
+
+    alert(
+      "Todavía no hay suficientes imágenes originales. Toma ejemplos con la cámara primero."
+    );
+
+    return;
+  }
+
+  const button =
+    document.getElementById(
+      "exportRaiseButton"
+    );
+
+  const status =
+    document.getElementById(
+      "raiseStatus"
+    );
+
+  button.disabled = true;
+
+  status.textContent =
+    "⏳ Preparando ZIP...";
+
+  try {
+
+    if (
+      typeof JSZip ===
+      "undefined"
+    ) {
+
+      throw new Error(
+        "No se pudo cargar JSZip."
+      );
+    }
+
+    const zip =
+      new JSZip();
+
+    /* -----------------------------------------------
+       README
+    ------------------------------------------------ */
+
+    const readme =
+
+`IA-OBJETOS
+==========
+
+Paquete generado por IA-Objetos.
+
+URL DEL PROYECTO
+----------------
+
+${IA_OBJETOS_URL}
+
+CLASES
+------
+
+${classes
+  .map(
+    (c, i) =>
+      `${i + 1}. ${c.name} (${trainingImages[i]?.length || 0} imágenes)`
+  )
+  .join("\n")}
+
+ESTRUCTURA
+----------
+
+dataset/
+model/
+raise/
+
+El directorio dataset contiene las fotografías
+originales separadas por clase.
+
+El directorio model contiene el modelo TensorFlow.js
+cuando se realizó un entrenamiento en IA-Objetos.
+
+El directorio raise contiene información para
+reconstruir la configuración del proyecto.
+
+RAISE PLAYGROUND
+----------------
+
+https://playground.raise.mit.edu/
+
+IMPORTANTE
+----------
+
+Este ZIP es un paquete de datos/modelo web.
+
+No significa que RAISE Playground vaya a importar
+automáticamente todo el ZIP como un proyecto nativo.
+
+Si la versión de RAISE utilizada requiere un formato
+específico, los archivos deben importarse siguiendo
+el formato aceptado por esa versión.
+
+`;
+
+    zip.file(
+      "README.txt",
+      readme
+    );
+
+
+    /* -----------------------------------------------
+       DATASET JSON
+    ------------------------------------------------ */
+
+    const metadata = {
+
+      generator:
+        "IA-Objetos",
+
+      version:
+        "3.0",
+
+      createdAt:
+        new Date().toISOString(),
+
+      projectUrl:
+        IA_OBJETOS_URL,
+
+      raiseUrl:
+        RAISE_PLAYGROUND_URL,
+
+      classes:
+        classes.map(
+          (c, index) => ({
+
+            index:
+              index,
+
+            name:
+              c.name,
+
+            images:
+              trainingImages[index]?.length || 0
+
+          })
+        )
+
+    };
+
+    zip.file(
+      "dataset.json",
+      JSON.stringify(
+        metadata,
+        null,
+        2
+      )
+    );
+
+
+    /* -----------------------------------------------
+       LABELS
+    ------------------------------------------------ */
+
+    const labels =
+      classes
+        .map(
+          (c, i) =>
+            i +
+            ": " +
+            c.name
+        )
+        .join("\n");
+
+    zip.file(
+      "labels.txt",
+      labels
+    );
+
+
+    /* -----------------------------------------------
+       LINK
+    ------------------------------------------------ */
+
+    zip.file(
+      "IA-OBJETOS-LINK.txt",
+
+`IA-OBJETOS
+
+Proyecto:
+${IA_OBJETOS_URL}
+
+RAISE Playground:
+${RAISE_PLAYGROUND_URL}
+
+Para compartir este proyecto con otra persona,
+la URL de IA-Objetos debe estar publicada en HTTPS.
+`
+    );
+
+
+    /* -----------------------------------------------
+       CONFIGURACIÓN RAISE
+    ------------------------------------------------ */
+
+    const raiseProject = {
+
+      format:
+        "IA-OBJETOS-RAISE",
+
+      formatVersion:
+        1,
+
+      projectName:
+        "IA-Objetos",
+
+      sourceUrl:
+        IA_OBJETOS_URL,
+
+      classes:
+        classes.map(
+          (c, i) => ({
+
+            index:
+              i,
+
+            name:
+              c.name,
+
+            folder:
+              "dataset/" +
+              sanitizarNombreArchivo(
+                c.name
+              )
+
+          })
+        ),
+
+      dataset:
+        "dataset.json",
+
+      labels:
+        "labels.txt",
+
+      model:
+        classifier
+          ? "model/model.json"
+          : null
+
+    };
+
+    zip.file(
+      "raise/raise-project.json",
+      JSON.stringify(
+        raiseProject,
+        null,
+        2
+      )
+    );
+
+
+    /* -----------------------------------------------
+       EXPORTAR MODELO TFJS
+    ------------------------------------------------ */
+
+    if (classifier) {
+
+      status.textContent =
+        "⏳ Exportando modelo de IA...";
+
+      const artifacts =
+        await obtenerModeloTFJS();
+
+      if (artifacts) {
+
+        /*
+          model.json
+        */
+
+        const modelJson = {
+
+          format:
+            artifacts.format,
+
+          generatedBy:
+            artifacts.generatedBy,
+
+          convertedBy:
+            artifacts.convertedBy,
+
+          modelTopology:
+            artifacts.modelTopology,
+
+          weightsManifest: [
+            {
+              paths: [
+                "weights.bin"
+              ],
+
+              weights:
+                artifacts.weightSpecs
+            }
+          ]
+
+        };
+
+        zip.file(
+          "model/model.json",
+          JSON.stringify(
+            modelJson,
+            null,
+            2
+          )
+        );
+
+
+        /*
+          weights.bin
+        */
+
+        if (artifacts.weightData) {
+
+          zip.file(
+            "model/weights.bin",
+            new Uint8Array(
+              artifacts.weightData
+            )
+          );
+        }
+
+
+        /*
+          metadata
+        */
+
+        const modelMetadata = {
+
+          generator:
+            "IA-Objetos",
+
+          modelType:
+            "TensorFlow.js LayersModel",
+
+          backbone:
+            "MobileNet",
+
+          classes:
+            classes.map(
+              c => c.name
+            ),
+
+          createdAt:
+            new Date().toISOString()
+
+        };
+
+        zip.file(
+          "model/metadata.json",
+          JSON.stringify(
+            modelMetadata,
+            null,
+            2
+          )
+        );
+      }
+    }
+
+
+    /* -----------------------------------------------
+       IMÁGENES
+    ------------------------------------------------ */
+
+    status.textContent =
+      "⏳ Añadiendo imágenes...";
+
+    for (
+      let classIndex = 0;
+      classIndex < classes.length;
+      classIndex++
+    ) {
+
+      const className =
+        sanitizarNombreArchivo(
+          classes[classIndex].name
+        );
+
+      const folder =
+        zip.folder(
+          "dataset/" +
+          className
+        );
+
+      const images =
+        trainingImages[classIndex] ||
+        [];
+
+      for (
+        let imageIndex = 0;
+        imageIndex < images.length;
+        imageIndex++
+      ) {
+
+        const filename =
+          className +
+          "_" +
+          String(
+            imageIndex + 1
+          ).padStart(
+            4,
+            "0"
+          ) +
+          ".jpg";
+
+        folder.file(
+          filename,
+          images[imageIndex]
+        );
+      }
+    }
+
+
+    /* -----------------------------------------------
+       GENERAR ZIP
+    ------------------------------------------------ */
+
+    status.textContent =
+      "⏳ Comprimiendo ZIP...";
+
+    const blob =
+      await zip.generateAsync({
+
+        type:
+          "blob",
+
+        compression:
+          "DEFLATE",
+
+        compressionOptions: {
+
+          level:
+            6
+
+        },
+
+        onUpdate:
+          metadata => {
+
+            const percent =
+              Math.round(
+                metadata.percent
+              );
+
+            status.textContent =
+              "⏳ Comprimiendo... " +
+              percent +
+              "%";
+          }
+
+      });
+
+
+    /* -----------------------------------------------
+       DESCARGA
+    ------------------------------------------------ */
+
+    const url =
+      URL.createObjectURL(blob);
+
+    const a =
+      document.createElement("a");
+
+    a.href = url;
+
+    a.download =
+      "IA-Objetos-RAISE-" +
+      Date.now() +
+      ".zip";
+
+    document.body.appendChild(a);
+
+    a.click();
+
+    a.remove();
+
+    setTimeout(
+      () => {
+        URL.revokeObjectURL(url);
+      },
+      10000
+    );
+
+
+    status.innerHTML =
+      "✅ ZIP creado correctamente.<br>" +
+      totalImages +
+      " imágenes exportadas." +
+      (
+        classifier
+          ? "<br>🧠 Modelo TensorFlow.js incluido."
+          : ""
+      );
+
+    vibrar();
+
+  } catch(error) {
+
+    console.error(
+      "Exportación RAISE:",
+      error
+    );
+
+    status.textContent =
+      "❌ Error exportando: " +
+      error.message;
+
+  } finally {
+
+    button.disabled = false;
+  }
+}
+
+
+/* =====================================================
+   ABRIR RAISE
+===================================================== */
+
+function abrirRaisePlayground() {
+
+  window.open(
+    RAISE_PLAYGROUND_URL,
+    "_blank",
+    "noopener,noreferrer"
+  );
+}
+
+
+/* =====================================================
+   SANITIZAR
+===================================================== */
+
+function sanitizarNombreArchivo(name) {
+
+  let result =
+    String(name)
+
+      .normalize("NFD")
+
+      .replace(
+        /[\u0300-\u036f]/g,
+        ""
+      )
+
+      .replace(
+        /[^a-zA-Z0-9_\- ]/g,
+        ""
+      )
+
+      .trim()
+
+      .replace(
+        /\s+/g,
+        "_"
+      );
+
+  if (!result) {
+    result = "Clase";
+  }
+
+  return result.substring(
+    0,
+    60
+  );
+}
+
+
+/* =====================================================
+   UTILIDADES
+===================================================== */
+
+function sleep(ms) {
+
+  return new Promise(
+    resolve =>
+      setTimeout(
+        resolve,
+        ms
+      )
+  );
+}
+
+function vibrar() {
+
+  if (navigator.vibrate) {
+
+    navigator.vibrate(30);
+  }
+}
+
+function escapeHTML(text) {
+
+  return String(text)
+
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+
+    .replace(
+      /</g,
+      "&lt;"
+    )
+
+    .replace(
+      />/g,
+      "&gt;"
+    )
+
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+}
+
+
+/* =====================================================
+   GUARDAR DATOS
+===================================================== */
+
+function guardarDatosBasicos() {
+
+  try {
+
+    localStorage.setItem(
+      "iaObjetosClasses",
+      JSON.stringify(
+        classes.map(
+          c => c.name
+        )
+      )
+    );
+
+  } catch(error) {
+
+    console.warn(
+      "No se pudieron guardar las clases:",
+      error
+    );
+  }
+}
+
+
+setInterval(
+  () => {
+
+    guardarDatosBasicos();
+
+  },
+  3000
 );
 
 
-/* =========================================================
-   INICIO SEGURO
-========================================================= */
+/* =====================================================
+   INICIO
+===================================================== */
 
-(function init(){
+window.addEventListener(
+  "load",
+  async () => {
 
- /*
-    Primero cargamos.
- */
+    try {
 
- loadGame();
+      await tf.ready();
 
+      document
+        .getElementById(
+          "loadingScreen"
+        )
+        .style.display =
+        "none";
 
- /*
-    Detectamos si la partida cargada
-    ya estaba en bancarrota.
- */
+      console.log(
+        "TensorFlow.js listo"
+      );
 
- if(
-  game.money<=DEBT_LIMIT
- ){
+    } catch(error) {
 
-  game.money=DEBT_LIMIT;
+      console.error(error);
 
-  bankrupt=true;
+      document
+        .getElementById(
+          "loadingScreen"
+        )
+        .innerHTML = `
 
- }
+          <div style="font-size:60px">
+            ❌
+          </div>
 
+          <p>
+            No se pudo cargar TensorFlow.js.
+          </p>
 
- /*
-    Renderizamos ANTES de conectar
-    los eventos.
- */
-
- render();
-
-
- /*
-    Ahora conectamos las pestañas.
- */
-
- setupTabs();
-
-
- /*
-    Registro inicial solamente si
-    no existía historial.
- */
-
- if(
-  !$("log").innerHTML
- ){
-
-  log(
-   "🏢 Compañía fundada en 1972 con $10,000.",
-   "good"
-  );
-
- }
+        `;
+    }
+  }
+);
 
 
- /*
-    Si ya estaba quebrada, mostramos
-    la pantalla.
- */
+/* =====================================================
+   LIMPIAR AL SALIR
+===================================================== */
 
- if(bankrupt){
+window.addEventListener(
+  "beforeunload",
+  () => {
 
-  showBankruptcy();
+    detenerCamara();
+    detenerPrueba();
 
- }else{
-
-  startClock();
-
- }
-
-})();
+  }
+);
 
 </script>
 
