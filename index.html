@@ -82,7 +82,8 @@ nav{
  margin:12px auto;
  display:flex;
  gap:7px;
- overflow-x:auto
+ overflow-x:auto;
+ padding:0 10px
 }
 
 button{
@@ -219,7 +220,8 @@ main{
  align-items:center;
  text-align:center;
  color:#7edcff;
- font-weight:bold
+ font-weight:bold;
+ overflow:hidden
 }
 
 .controls{
@@ -261,6 +263,8 @@ main{
 .modalbox{
  max-width:650px;
  width:100%;
+ max-height:90vh;
+ overflow:auto;
  background:#121d30;
  border:1px solid #344968;
  border-radius:18px;
@@ -271,6 +275,19 @@ main{
 .bigRating{
  font-size:60px;
  font-weight:900
+}
+
+.debt{
+ color:#ff7777!important
+}
+
+.warningBox{
+ border:1px solid #704343;
+ background:#321719;
+ color:#ffb0b0;
+ padding:12px;
+ border-radius:10px;
+ margin-bottom:12px
 }
 
 footer{
@@ -292,6 +309,10 @@ footer{
  .console{
   height:190px
  }
+
+ .screen{
+  width:70%
+ }
 }
 </style>
 </head>
@@ -304,6 +325,7 @@ footer{
 
 <div>
 <h1>🎮 Console Factory</h1>
+
 <div class="small">
 Construye consolas desde 1972 hasta 2026
 </div>
@@ -351,15 +373,31 @@ Construye consolas desde 1972 hasta 2026
 
 </header>
 
-<nav>
 
-<button class="active" data-tab="factory">🏭 Fábrica</button>
-<button data-tab="design">🧩 Diseño</button>
-<button data-tab="research">🔬 Investigación</button>
-<button data-tab="market">💰 Economía</button>
-<button data-tab="history">📜 Consolas</button>
+<nav id="mainNav">
+
+<button class="active" data-tab="factory">
+🏭 Fábrica
+</button>
+
+<button data-tab="design">
+🧩 Diseño
+</button>
+
+<button data-tab="research">
+🔬 Investigación
+</button>
+
+<button data-tab="market">
+💰 Economía
+</button>
+
+<button data-tab="history">
+📜 Consolas
+</button>
 
 </nav>
+
 
 <main>
 
@@ -371,13 +409,16 @@ Construye consolas desde 1972 hasta 2026
 
 <div class="panel">
 
-<h2 id="eraTitle">Primeros experimentos</h2>
+<h2 id="eraTitle">
+Primeros experimentos
+</h2>
 
 <p id="eraDescription" class="small"></p>
 
 <div id="tasks" class="cards"></div>
 
 </div>
+
 
 <div class="panel">
 
@@ -388,6 +429,7 @@ Construye consolas desde 1972 hasta 2026
 </div>
 
 </div>
+
 
 <div>
 
@@ -402,6 +444,7 @@ Leer noticia del año
 </button>
 
 </div>
+
 
 <div class="panel">
 
@@ -428,13 +471,13 @@ Leer noticia del año
 
 <p class="small">
 Las tecnologías aparecen en orden cronológico.
-No puedes instalar una tecnología antes de que exista.
-Primero debes investigar y después comprarla.
+Primero debes investigar y después comprar la tecnología.
 </p>
 
 <div id="components" class="cards"></div>
 
 </div>
+
 
 <div class="panel">
 
@@ -527,6 +570,7 @@ que después podrás instalar en tu consola.
 
 </main>
 
+
 <footer>
 Console Factory — simulación educativa de evolución tecnológica.
 </footer>
@@ -566,10 +610,27 @@ Continuar
 </div>
 
 
+<!-- BANCARROTA -->
+
+<div class="modal" id="bankruptcyModal">
+
+<div class="modalbox">
+
+<div id="bankruptcyContent"></div>
+
+<button onclick="closeBankruptcy()">
+Aceptar
+</button>
+
+</div>
+
+</div>
+
+
 <script>
 
 /* =========================================================
-   HISTORIA CRONOLÓGICA
+   HISTORIA
 ========================================================= */
 
 const HISTORY=[
@@ -827,6 +888,7 @@ network:[
 
 };
 
+
 const NAMES={
 cpu:["CPU","Procesador principal"],
 gpu:["GPU","Gráficos"],
@@ -860,15 +922,39 @@ const ERAS=[
 
 
 /* =========================================================
-   ESTADO DEL JUEGO
+   CONFIGURACIÓN ECONÓMICA
 ========================================================= */
+
+/*
+   IMPORTANTE:
+
+   El dinero YA NO se reinicia ni se resta cada segundo.
+
+   Cada día tiene un coste.
+   El juego avanza 1 día cada ~1.64 segundos,
+   porque 365 días = 10 minutos.
+
+   El dinero puede bajar hasta -$10,000.
+
+   Al llegar a -$10,000:
+   - la empresa quiebra;
+   - se detiene el reloj;
+   - aparece la pantalla de bancarrota.
+*/
+
+const STARTING_MONEY=10000;
+
+const DEBT_LIMIT=-10000;
+
+let bankrupt=false;
 
 let game={
 
 year:1972,
+
 day:1,
 
-money:10000,
+money:STARTING_MONEY,
 
 reputation:0,
 
@@ -897,7 +983,9 @@ revenue:0,
 
 expenses:0,
 
-consoles:[]
+consoles:[],
+
+debts:0
 
 };
 
@@ -909,21 +997,35 @@ consoles:[]
 const $=id=>document.getElementById(id);
 
 function money(n){
- return "$"+Math.round(n).toLocaleString("en-US");
+
+ const value=Math.round(n);
+
+ return (value<0?"-$":"$")+
+ Math.abs(value).toLocaleString("en-US");
+
 }
 
+
 function clamp(n,a,b){
- return Math.max(a,Math.min(b,n));
+
+ return Math.max(
+  a,
+  Math.min(b,n)
+ );
+
 }
+
 
 function era(){
 
  return ERAS.find(
-  x=>game.year>=x[0] &&
-     game.year<=x[1]
+  x=>
+   game.year>=x[0] &&
+   game.year<=x[1]
  ) || ERAS[ERAS.length-1];
 
 }
+
 
 function quality(){
 
@@ -937,11 +1039,14 @@ function quality(){
 
  q+=game.design.tests*5;
 
- q+=Math.floor(game.reputation/4);
+ q+=Math.floor(
+  game.reputation/4
+ );
 
  return q;
 
 }
+
 
 function target(){
 
@@ -952,15 +1057,26 @@ function target(){
 
 }
 
+
 function dailyCost(){
+
+ /*
+   Antes el coste era suficientemente grande
+   para vaciar la cuenta en segundos.
+
+   Ahora es pequeño y solamente se cobra
+   cuando realmente pasa un día.
+ */
 
  return Math.max(
   2,
   Math.round(
-   era()[3]/18000
+   era()[3]/180000
   )
  );
+
 }
+
 
 function researched(k,i){
 
@@ -973,10 +1089,107 @@ function researched(k,i){
 
 
 /* =========================================================
+   CONTROL DE DEUDA
+========================================================= */
+
+function checkBankruptcy(){
+
+ if(
+  game.money<=DEBT_LIMIT
+ ){
+
+  game.money=DEBT_LIMIT;
+
+  bankrupt=true;
+
+  clearInterval(dayTimer);
+
+  log(
+   "💀 LA EMPRESA HA QUEBRADO. Has alcanzado la deuda máxima de "+
+   money(Math.abs(DEBT_LIMIT))+".",
+   "bad"
+  );
+
+  showBankruptcy();
+
+  render();
+
+  return true;
+
+ }
+
+ return false;
+
+}
+
+
+function spend(amount,reason="Gasto"){
+
+ amount=Math.max(
+  0,
+  Math.round(amount)
+ );
+
+ if(
+  amount===0
+ ){
+
+  return true;
+
+ }
+
+ game.money-=amount;
+
+ game.expenses+=amount;
+
+ if(
+  game.money<DEBT_LIMIT
+ ){
+
+  game.money=DEBT_LIMIT;
+
+ }
+
+ log(
+  "💸 "+reason+": "+money(amount),
+  "warn"
+ );
+
+ checkBankruptcy();
+
+ return !bankrupt;
+
+}
+
+
+function earn(amount,reason="Ingreso"){
+
+ amount=Math.max(
+  0,
+  Math.round(amount)
+ );
+
+ game.money+=amount;
+
+ game.revenue+=amount;
+
+ log(
+  "💰 "+reason+": +"+money(amount),
+  "good"
+ );
+
+ render();
+
+}
+
+
+/* =========================================================
    LOG
 ========================================================= */
 
 function log(message,type=""){
+
+ if(!$("log")) return;
 
  $("log").innerHTML=
  `<div class="${type}">
@@ -999,11 +1212,14 @@ function saveGame(){
  );
 
  log(
-  "Partida guardada correctamente.",
+  "💾 Partida guardada correctamente.",
   "good"
  );
 
+ render();
+
 }
+
 
 function loadGame(){
 
@@ -1016,18 +1232,74 @@ function loadGame(){
 
   if(data){
 
+   const saved=
+    JSON.parse(data);
+
    game=
     Object.assign(
      game,
-     JSON.parse(data)
+     saved
     );
+
+   /*
+      Compatibilidad con partidas antiguas.
+   */
+
+   game.research=
+    Array.isArray(game.research)
+    ?game.research
+    :[];
+
+   game.consoles=
+    Array.isArray(game.consoles)
+    ?game.consoles
+    :[];
+
+   game.levels=
+    Object.assign(
+     {
+      cpu:0,
+      gpu:0,
+      ram:0,
+      storage:0,
+      audio:0,
+      controls:0,
+      system:0,
+      network:0
+     },
+     game.levels||{}
+    );
+
+   game.design=
+    Object.assign(
+     {
+      name:"Proyecto 01",
+      progress:0,
+      tests:0
+     },
+     game.design||{}
+    );
+
+   /*
+      Si una partida antigua tiene demasiado
+      dinero negativo, la limitamos.
+   */
+
+   if(
+    game.money<DEBT_LIMIT
+   ){
+
+    game.money=DEBT_LIMIT;
+
+   }
 
   }
 
  }catch(error){
 
-  console.log(
-   "Save corrupto, comenzando partida limpia."
+  console.error(
+   "Error cargando partida:",
+   error
   );
 
  }
@@ -1040,6 +1312,12 @@ function loadGame(){
 ========================================================= */
 
 function renameConsole(){
+
+ if(bankrupt){
+
+  return;
+
+ }
 
  const name=
   prompt(
@@ -1068,25 +1346,59 @@ function renameConsole(){
 
 function nextDay(){
 
+ if(bankrupt){
+
+  return;
+
+ }
+
  if(
   game.year===2026 &&
   game.day===365
+ ){
+
+  clearInterval(dayTimer);
+
+  log(
+   "🏁 Has llegado a 2026.",
+   "news"
+  );
+
+  render();
+
+  return;
+
+ }
+
+
+ /*
+    AVANZA UN SOLO DÍA.
+    NO SE REINICIA EL DINERO.
+ */
+
+ game.day++;
+
+ const cost=dailyCost();
+
+ /*
+    SOLO AQUÍ se cobra el coste diario.
+ */
+
+ if(
+  !spend(
+   cost,
+   "Costes diarios de la empresa"
+  )
  ){
 
   return;
 
  }
 
- game.day++;
 
- const cost=dailyCost();
-
- game.money-=cost;
-
- game.expenses+=cost;
-
-
- /* Coste mensual */
+ /*
+    Coste mensual.
+ */
 
  if(
   game.day%30===0
@@ -1097,20 +1409,23 @@ function nextDay(){
     era()[3]*0.02
    );
 
-  game.money-=monthly;
+  if(
+   !spend(
+    monthly,
+    "Costes mensuales de laboratorio"
+   )
+  ){
 
-  game.expenses+=monthly;
+   return;
 
-  log(
-   "Costes mensuales de laboratorio: "+
-   money(monthly),
-   "warn"
-  );
+  }
 
  }
 
 
- /* Año nuevo */
+ /*
+    Año nuevo.
+ */
 
  if(
   game.day>=365
@@ -1124,6 +1439,11 @@ function nextDay(){
 
    game.year++;
 
+   /*
+      Ingreso anual.
+      NO reinicia el dinero.
+   */
+
    const income=
     Math.round(
      1000+
@@ -1131,9 +1451,10 @@ function nextDay(){
      game.sales*15
     );
 
-   game.money+=income;
-
-   game.revenue+=income;
+   earn(
+    income,
+    "Ingresos anuales"
+   );
 
    game.design.progress=0;
 
@@ -1176,6 +1497,12 @@ function showNews(){
    x=>x[0]===game.year
   );
 
+ if(!news){
+
+  return;
+
+ }
+
  $("newsContent").innerHTML=`
 
  <h2>📰 Noticias de ${game.year}</h2>
@@ -1197,6 +1524,7 @@ function showNews(){
 
 }
 
+
 function closeNews(){
 
  $("newsModal")
@@ -1211,8 +1539,20 @@ function closeNews(){
 
 function research(k,i){
 
+ if(bankrupt){
+
+  return;
+
+ }
+
  const tech=
   TECH[k][i];
+
+ if(!tech){
+
+  return;
+
+ }
 
  const cost=
   Math.max(
@@ -1243,23 +1583,34 @@ function research(k,i){
 
  }
 
+ /*
+    Permitimos investigar con deuda,
+    siempre que el gasto no lleve por
+    debajo de -$10,000.
+ */
+
  if(
-  game.money<
-  cost
+  game.money-cost<DEBT_LIMIT
  ){
 
   alert(
-   "Necesitas "+
-   money(cost)
+   "Ese proyecto te llevaría por debajo del límite de deuda de -$10,000."
   );
 
   return;
 
  }
 
- game.money-=cost;
+ if(
+  !spend(
+   cost,
+   "Investigación de "+tech[0]
+  )
+ ){
 
- game.expenses+=cost;
+  return;
+
+ }
 
  game.research.push(
   k+"-"+i
@@ -1267,9 +1618,7 @@ function research(k,i){
 
  log(
   "🔬 Investigación terminada: "+
-  tech[0]+
-  ". Coste "+
-  money(cost)+".",
+  tech[0]+".",
   "good"
  );
 
@@ -1284,8 +1633,20 @@ function research(k,i){
 
 function install(k,i){
 
+ if(bankrupt){
+
+  return;
+
+ }
+
  const tech=
   TECH[k][i];
+
+ if(!tech){
+
+  return;
+
+ }
 
  if(
   game.year<
@@ -1336,29 +1697,33 @@ function install(k,i){
  }
 
  if(
-  game.money<
-  tech[2]
+  game.money-tech[2]<DEBT_LIMIT
  ){
 
   alert(
-   "Capital insuficiente."
+   "Esta compra te llevaría por debajo de -$10,000."
   );
 
   return;
 
  }
 
- game.money-=tech[2];
+ if(
+  !spend(
+   tech[2],
+   "Hardware "+tech[0]
+  )
+ ){
 
- game.expenses+=tech[2];
+  return;
+
+ }
 
  game.levels[k]=i;
 
  log(
   "⚙️ Instalado "+
-  tech[0]+
-  ". Coste "+
-  money(tech[2])+".",
+  tech[0]+".",
   "good"
  );
 
@@ -1373,18 +1738,23 @@ function install(k,i){
 
 function buildPrototype(){
 
+ if(bankrupt){
+
+  return;
+
+ }
+
  const cost=
   Math.round(
    era()[3]*0.12
   );
 
  if(
-  game.money<
-  cost
+  game.money-cost<DEBT_LIMIT
  ){
 
   alert(
-   "No tienes suficiente dinero."
+   "Construir esto te llevaría por debajo de -$10,000."
   );
 
   return;
@@ -1404,9 +1774,16 @@ function buildPrototype(){
 
  }
 
- game.money-=cost;
+ if(
+  !spend(
+   cost,
+   "Construcción del prototipo"
+  )
+ ){
 
- game.expenses+=cost;
+  return;
+
+ }
 
  game.design.progress=
   clamp(
@@ -1416,9 +1793,7 @@ function buildPrototype(){
   );
 
  log(
-  "🏗️ Prototipo construido por "+
-  money(cost)+
-  ". Avance: "+
+  "🏗️ Prototipo construido. Avance: "+
   game.design.progress+"%.",
   "good"
  );
@@ -1433,6 +1808,12 @@ function buildPrototype(){
 ========================================================= */
 
 function testPrototype(){
+
+ if(bankrupt){
+
+  return;
+
+ }
 
  if(
   game.design.progress<75
@@ -1452,21 +1833,27 @@ function testPrototype(){
   );
 
  if(
-  game.money<
-  cost
+  game.money-cost<DEBT_LIMIT
  ){
 
   alert(
-   "No puedes pagar las pruebas."
+   "Las pruebas te llevarían por debajo de -$10,000."
   );
 
   return;
 
  }
 
- game.money-=cost;
+ if(
+  !spend(
+   cost,
+   "Pruebas de laboratorio"
+  )
+ ){
 
- game.expenses+=cost;
+  return;
+
+ }
 
  const roll=
   quality()+
@@ -1483,8 +1870,8 @@ function testPrototype(){
   game.reputation+=3;
 
   log(
-   "🧪 PRUEBAS SUPERADAS "+
-   "("+roll+"/"+target()+")",
+   "🧪 PRUEBAS SUPERADAS ("+
+   roll+"/"+target()+")",
    "good"
   );
 
@@ -1504,9 +1891,8 @@ function testPrototype(){
    );
 
   log(
-   "❌ FALLO DE PRUEBAS "+
-   "("+roll+"/"+target()+"). "+
-   "El prototipo vuelve a ingeniería.",
+   "❌ FALLO DE PRUEBAS ("+
+   roll+"/"+target()+"). El prototipo vuelve a ingeniería.",
    "bad"
   );
 
@@ -1571,6 +1957,12 @@ function rating(){
 
 function manufacture(){
 
+ if(bankrupt){
+
+  return;
+
+ }
+
  if(
   game.design.progress<100
  ){
@@ -1613,25 +2005,37 @@ function manufacture(){
   );
 
  if(
-  game.money<
-  cost
+  game.money-cost<DEBT_LIMIT
  ){
 
   alert(
-   "No puedes financiar el lote."
+   "No puedes financiar el lote porque superarías la deuda máxima de -$10,000."
   );
 
   return;
 
  }
 
- game.money-=cost;
+ /*
+    Fabricar primero cobra.
+    Después entra el ingreso.
+ */
 
- game.expenses+=cost;
+ if(
+  !spend(
+   cost,
+   "Fabricación del lote"
+  )
+ ){
 
- game.money+=revenue;
+  return;
 
- game.revenue+=revenue;
+ }
+
+ earn(
+  revenue,
+  "Ventas de "+game.design.name
+ );
 
  game.sales++;
 
@@ -1669,8 +2073,7 @@ function manufacture(){
  log(
   "🎉 "+
   game.design.name+
-  " lanzada. "+
-  "Producción: "+
+  " lanzada. Producción: "+
   money(cost)+
   " · Ingresos: "+
   money(revenue)+
@@ -1683,6 +2086,10 @@ function manufacture(){
  showRating(
   consoleData
  );
+
+ /*
+    NUEVO PROYECTO.
+ */
 
  game.design.progress=0;
 
@@ -1710,31 +2117,21 @@ function showRating(c){
 
  let text;
 
- if(
-  c.rating>=90
- ){
+ if(c.rating>=90){
 
-  text=
-   "Producto excepcional";
+  text="Producto excepcional";
 
- }else if(
-  c.rating>=75
- ){
+ }else if(c.rating>=75){
 
-  text=
-   "Muy sólido";
+  text="Muy sólido";
 
- }else if(
-  c.rating>=60
- ){
+ }else if(c.rating>=60){
 
-  text=
-   "Correcto, pero mejorable";
+  text="Correcto, pero mejorable";
 
  }else{
 
-  text=
-   "Necesita bastante trabajo";
+  text="Necesita bastante trabajo";
 
  }
 
@@ -1749,34 +2146,28 @@ function showRating(c){
  <h3>${text}</h3>
 
  <p>
- <b>Año:</b>
- ${c.year}
+ <b>Año:</b> ${c.year}
  </p>
 
  <p>
- <b>Día:</b>
- ${c.day}
+ <b>Día:</b> ${c.day}
  </p>
 
  <p>
- <b>Calidad técnica:</b>
- ${c.quality}
+ <b>Calidad técnica:</b> ${c.quality}
  </p>
 
  <p>
- <b>Coste:</b>
- ${money(c.cost)}
+ <b>Coste:</b> ${money(c.cost)}
  </p>
 
  <p>
- <b>Ingresos:</b>
- ${money(c.revenue)}
+ <b>Ingresos:</b> ${money(c.revenue)}
  </p>
 
  <p class="small">
  La nota combina tecnología instalada,
- completitud del diseño y resultados
- de las pruebas.
+ completitud del diseño y resultados de las pruebas.
  </p>
 
  `;
@@ -1785,6 +2176,7 @@ function showRating(c){
   .classList.add("open");
 
 }
+
 
 function closeRating(){
 
@@ -1795,10 +2187,153 @@ function closeRating(){
 
 
 /* =========================================================
+   BANCARROTA
+========================================================= */
+
+function showBankruptcy(){
+
+ $("bankruptcyContent").innerHTML=`
+
+ <h2>💀 IMPERIO EN BANCARROTA</h2>
+
+ <div class="bigRating">
+ -$10,000
+ </div>
+
+ <div class="warningBox">
+ Has alcanzado el límite máximo de deuda.
+ </div>
+
+ <p>
+ Tu empresa ya no puede continuar.
+ </p>
+
+ <p class="small">
+ Para volver a jugar, utiliza el botón
+ "Reiniciar partida".
+ </p>
+
+ <button onclick="resetGame()">
+ 🔄 Reiniciar partida
+ </button>
+
+ `;
+
+ $("bankruptcyModal")
+  .classList.add("open");
+
+}
+
+
+function closeBankruptcy(){
+
+ /*
+    No dejamos continuar una partida quebrada.
+ */
+
+ if(bankrupt){
+
+  return;
+
+ }
+
+ $("bankruptcyModal")
+  .classList.remove("open");
+
+}
+
+
+/* =========================================================
+   REINICIAR
+========================================================= */
+
+function resetGame(){
+
+ const confirmed=
+  confirm(
+   "¿Seguro que quieres borrar la partida y comenzar otra vez con $10,000?"
+  );
+
+ if(!confirmed){
+
+  return;
+
+ }
+
+ clearInterval(dayTimer);
+
+ localStorage.removeItem(
+  "consoleFactorySave"
+ );
+
+ bankrupt=false;
+
+ game={
+
+  year:1972,
+
+  day:1,
+
+  money:STARTING_MONEY,
+
+  reputation:0,
+
+  research:[],
+
+  levels:{
+   cpu:0,
+   gpu:0,
+   ram:0,
+   storage:0,
+   audio:0,
+   controls:0,
+   system:0,
+   network:0
+  },
+
+  design:{
+   name:"Proyecto 01",
+   progress:0,
+   tests:0
+  },
+
+  sales:0,
+
+  revenue:0,
+
+  expenses:0,
+
+  consoles:[],
+
+  debts:0
+
+ };
+
+ $("log").innerHTML="";
+
+ $("bankruptcyModal")
+  .classList.remove("open");
+
+ log(
+  "🏢 Compañía fundada en 1972 con $10,000.",
+  "good"
+ );
+
+ render();
+
+ startClock();
+
+}
+
+
+/* =========================================================
    RENDER
 ========================================================= */
 
 function render(){
+
+ if(!$("year")) return;
+
 
  $("year").textContent=
   game.year;
@@ -1809,38 +2344,98 @@ function render(){
  $("money").textContent=
   money(game.money);
 
+ $("money").className=
+  game.money<0
+  ?"debt"
+  :"";
+
  $("fans").textContent=
   game.reputation;
 
  $("sales").textContent=
   game.sales;
 
- $("timeline").style.width=
-  (
-   (game.year-1972)/54*100
-  )+"%";
 
+ /*
+    Progreso 1972 → 2026.
+ */
+
+ const timelineProgress=
+  clamp(
+   (
+    (game.year-1972)+
+    ((game.day-1)/365)
+   )/
+   54*
+   100,
+   0,
+   100
+  );
+
+ $("timeline").style.width=
+  timelineProgress+"%";
+
+
+ /*
+    Reloj:
+    exactamente 10 minutos por año.
+ */
+
+ const secondsLeft=
+  Math.max(
+   0,
+   Math.ceil(
+    (
+     365-game.day+
+     1
+    )*
+    (600/365)
+   )
+  );
+
+ const minutes=
+  Math.floor(
+   secondsLeft/60
+  );
+
+ const seconds=
+  secondsLeft%60;
+
+ $("clock").textContent=
+  String(minutes).padStart(2,"0")+
+  ":"+
+  String(seconds).padStart(2,"0");
+
+
+ const currentEra=
+  era();
 
  $("eraTitle").textContent=
-  era()[2];
+  currentEra[2];
+
 
  const news=
   HISTORY.find(
    x=>x[0]===game.year
   );
 
- $("eraDescription").textContent=
-  news[2];
 
- $("currentNews").innerHTML=`
+ if(news){
 
- <b>${news[1]}</b>
+  $("eraDescription").textContent=
+   news[2];
 
- <p class="small">
- ${news[2]}
- </p>
+  $("currentNews").innerHTML=`
 
- `;
+  <b>${news[1]}</b>
+
+  <p class="small">
+  ${news[2]}
+  </p>
+
+  `;
+
+ }
 
 
  const q=
@@ -1850,7 +2445,32 @@ function render(){
   target();
 
 
+ /*
+    STATUS
+ */
+
+ let debtWarning="";
+
+ if(game.money<0){
+
+  debtWarning=`
+
+  <div class="warningBox">
+  ⚠️ Estás en deuda:
+  <b>${money(game.money)}</b>
+  <br>
+  Límite:
+  <b>-$10,000</b>
+  </div>
+
+  `;
+
+ }
+
+
  $("status").innerHTML=`
+
+ ${debtWarning}
 
  <div class="row">
  <span>Consola</span>
@@ -1913,13 +2533,13 @@ function render(){
  `;
 
 
- /* COMPONENTES */
+ /* =======================================================
+    COMPONENTES
+ ======================================================= */
 
  $("components").innerHTML="";
 
- for(
-  const k in TECH
- ){
+ for(const k in TECH){
 
   let html=`
 
@@ -1935,6 +2555,7 @@ function render(){
 
   `;
 
+
   TECH[k].forEach(
    (tech,i)=>{
 
@@ -1947,6 +2568,10 @@ function render(){
     const available=
      game.year>=tech[1];
 
+    const researchedNow=
+     researched(k,i);
+
+
     html+=`
 
     <div style="
@@ -1954,8 +2579,8 @@ function render(){
      padding:8px;
      border:1px solid
      ${active?
-     "#58a6ff":
-     "#ffffff0b"};
+      "#58a6ff":
+      "#ffffff0b"};
      border-radius:9px
     ">
 
@@ -1994,7 +2619,8 @@ function render(){
      active||
      owned||
      !available||
-     !researched(k,i)
+     !researchedNow||
+     bankrupt
      ?"disabled":""
     }
 
@@ -2012,7 +2638,7 @@ function render(){
      !available
      ?"AÚN NO EXISTE"
      :
-     !researched(k,i)
+     !researchedNow
      ?"INVESTIGA PRIMERO"
      :
      "INSTALAR"
@@ -2027,8 +2653,8 @@ function render(){
    }
   );
 
-  html+=
-   "</div>";
+
+  html+="</div>";
 
   $("components").innerHTML+=
    html;
@@ -2036,13 +2662,13 @@ function render(){
  }
 
 
- /* INVESTIGACIÓN */
+ /* =======================================================
+    INVESTIGACIÓN
+ ======================================================= */
 
  $("researchCards").innerHTML="";
 
- for(
-  const k in TECH
- ){
+ for(const k in TECH){
 
   TECH[k].forEach(
    (tech,i)=>{
@@ -2086,7 +2712,8 @@ function render(){
 
     ${
      done||
-     !available
+     !available||
+     bankrupt
      ?"disabled":""
     }
 
@@ -2116,7 +2743,9 @@ function render(){
  }
 
 
- /* ECONOMÍA */
+ /* =======================================================
+    ECONOMÍA
+ ======================================================= */
 
  $("marketCards").innerHTML=`
 
@@ -2124,7 +2753,7 @@ function render(){
 
  <h3>💰 Dinero</h3>
 
- <b>
+ <b class="${game.money<0?"debt":""}">
  ${money(game.money)}
  </b>
 
@@ -2157,6 +2786,25 @@ function render(){
 
  </div>
 
+
+ <div class="card">
+
+ <h3>🏦 Deuda actual</h3>
+
+ <b class="${game.money<0?"debt":""}">
+ ${
+  game.money<0
+  ?money(game.money)
+  :"$0"
+ }
+ </b>
+
+ <p class="small">
+ Puedes llegar hasta -$10,000.
+ </p>
+
+ </div>
+
  `;
 
 
@@ -2173,21 +2821,34 @@ function render(){
  </p>
 
  <p>
- <b>Balance:</b>
+ <b>Balance histórico:</b>
  ${money(
   game.revenue-
   game.expenses
  )}
  </p>
 
+ <p>
+ <b>Dinero actual:</b>
+ <span class="${game.money<0?"debt":""}">
+ ${money(game.money)}
+ </span>
+ </p>
+
+ <p class="small">
+ El dinero actual no se reinicia automáticamente.
+ Los gastos solamente se descuentan cuando
+ realmente ocurre una operación.
+ </p>
+
  `;
 
 
- /* HISTORIAL */
+ /* =======================================================
+    HISTORIAL
+ ======================================================= */
 
- if(
-  game.consoles.length
- ){
+ if(game.consoles.length){
 
   $("historyList").innerHTML=
    game.consoles.map(
@@ -2241,87 +2902,253 @@ function render(){
  $("screenText").textContent=
   game.design.name;
 
+
+ /*
+    Desactivar operaciones si quebró.
+ */
+
+ if(bankrupt){
+
+  document
+   .querySelectorAll(
+    "button:not(#bankruptcyModal button)"
+   )
+   .forEach(
+    button=>{
+
+     if(
+      !button.closest(".modal")
+     ){
+
+      /*
+         Dejamos disponible reset.
+      */
+
+      if(
+       !button.innerText.includes("Reiniciar")
+      ){
+
+       button.disabled=true;
+
+      }
+
+     }
+
+    }
+   );
+
+ }
+
 }
 
 
 /* =========================================================
    TABS
+   BUG ORIGINAL CORREGIDO
 ========================================================= */
 
-document
-.querySelectorAll(".tabs button")
-.forEach(
- button=>{
+function setupTabs(){
 
-  button.onclick=()=>{
+ const navButtons=
+  document.querySelectorAll(
+   "#mainNav button"
+  );
 
-   document
-   .querySelectorAll(".tabs button")
-   .forEach(
-    b=>b.classList.remove("active")
+ const tabs=
+  document.querySelectorAll(
+   ".tab"
+  );
+
+
+ navButtons.forEach(
+  button=>{
+
+   button.addEventListener(
+    "click",
+    ()=>{
+
+     if(bankrupt){
+
+      return;
+
+     }
+
+     navButtons.forEach(
+      b=>
+       b.classList.remove(
+        "active"
+       )
+     );
+
+     button.classList.add(
+      "active"
+     );
+
+
+     tabs.forEach(
+      tab=>{
+       tab.style.display=
+        "none";
+      }
+     );
+
+
+     const targetTab=
+      document.getElementById(
+       button.dataset.tab
+      );
+
+
+     if(targetTab){
+
+      targetTab.style.display=
+       "block";
+
+     }
+
+    }
    );
 
-   button.classList.add("active");
+  }
+ );
 
-   document
-   .querySelectorAll(".tab")
-   .forEach(
-    tab=>tab.style.display="none"
-   );
+}
 
-   $(
-    button.dataset.tab
-   ).style.display="block";
 
-  };
+/* =========================================================
+   RELOJ PRINCIPAL
+========================================================= */
+
+let dayTimer=null;
+
+function startClock(){
+
+ if(dayTimer){
+
+  clearInterval(dayTimer);
 
  }
+
+ /*
+    600000 ms = 10 minutos
+    365 días por año
+
+    600000 / 365 =
+    ~1643.8 ms por día
+ */
+
+ const DAY_DURATION=
+  600000/365;
+
+ dayTimer=
+  setInterval(
+   ()=>{
+    nextDay();
+   },
+   DAY_DURATION
+  );
+
+}
+
+
+/* =========================================================
+   GUARDADO AUTOMÁTICO
+========================================================= */
+
+setInterval(
+ ()=>{
+
+  if(!bankrupt){
+
+   localStorage.setItem(
+    "consoleFactorySave",
+    JSON.stringify(game)
+   );
+
+  }
+
+ },
+ 20000
 );
 
 
 /* =========================================================
-   INICIO
+   INICIO SEGURO
 ========================================================= */
 
-loadGame();
+(function init(){
 
-render();
+ /*
+    Primero cargamos.
+ */
 
-log(
- "🏢 Compañía fundada en 1972 con $10,000.",
- "good"
-);
-
-
-/*
-  EXACTAMENTE 10 MINUTOS = 1 AÑO
-
-  10 minutos = 600 segundos
-  365 días
-  600 / 365 segundos por día
-*/
-
-setInterval(
- nextDay,
- Math.round(
-  600000/365
- )
-);
+ loadGame();
 
 
-/*
-  Guardado automático
-*/
+ /*
+    Detectamos si la partida cargada
+    ya estaba en bancarrota.
+ */
 
-setInterval(
- ()=>{
-  localStorage.setItem(
-   "consoleFactorySave",
-   JSON.stringify(game)
+ if(
+  game.money<=DEBT_LIMIT
+ ){
+
+  game.money=DEBT_LIMIT;
+
+  bankrupt=true;
+
+ }
+
+
+ /*
+    Renderizamos ANTES de conectar
+    los eventos.
+ */
+
+ render();
+
+
+ /*
+    Ahora conectamos las pestañas.
+ */
+
+ setupTabs();
+
+
+ /*
+    Registro inicial solamente si
+    no existía historial.
+ */
+
+ if(
+  !$("log").innerHTML
+ ){
+
+  log(
+   "🏢 Compañía fundada en 1972 con $10,000.",
+   "good"
   );
- },
- 20000
-);
+
+ }
+
+
+ /*
+    Si ya estaba quebrada, mostramos
+    la pantalla.
+ */
+
+ if(bankrupt){
+
+  showBankruptcy();
+
+ }else{
+
+  startClock();
+
+ }
+
+})();
 
 </script>
 
