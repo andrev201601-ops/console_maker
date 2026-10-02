@@ -1,0 +1,2329 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Console Factory 1972-2026</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+ margin:0;
+ background:#070b12;
+ color:#edf4ff;
+ font-family:Arial,Helvetica,sans-serif
+}
+
+header{
+ padding:18px;
+ background:linear-gradient(135deg,#111d32,#0b101b);
+ border-bottom:1px solid #263650;
+ position:sticky;
+ top:0;
+ z-index:10
+}
+
+h1,h2,h3{margin-top:0}
+
+.top{
+ max-width:1250px;
+ margin:auto;
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:15px;
+ flex-wrap:wrap
+}
+
+.stats{
+ display:flex;
+ gap:8px;
+ flex-wrap:wrap
+}
+
+.stat{
+ min-width:90px;
+ background:#101a2a;
+ border:1px solid #293b58;
+ padding:9px;
+ border-radius:10px;
+ text-align:center
+}
+
+.stat b{
+ display:block;
+ font-size:18px
+}
+
+.stat span{
+ color:#91a0b8;
+ font-size:11px
+}
+
+.timeline{
+ max-width:1250px;
+ margin:10px auto 0;
+ height:8px;
+ background:#05080d;
+ border-radius:20px;
+ overflow:hidden
+}
+
+.timeline div{
+ height:100%;
+ width:0;
+ background:linear-gradient(90deg,#4da3ff,#bd7cff);
+ transition:.3s
+}
+
+nav{
+ max-width:1250px;
+ margin:12px auto;
+ display:flex;
+ gap:7px;
+ overflow-x:auto
+}
+
+button{
+ background:#17243a;
+ color:white;
+ border:1px solid #30425e;
+ border-radius:9px;
+ padding:10px 13px;
+ cursor:pointer;
+ margin:3px
+}
+
+button:hover{
+ background:#223654;
+ border-color:#61adff
+}
+
+button:disabled{
+ opacity:.4;
+ cursor:not-allowed
+}
+
+.active{
+ background:#4da3ff!important;
+ color:#06101d!important
+}
+
+main{
+ max-width:1250px;
+ margin:auto;
+ padding:10px
+}
+
+.grid{
+ display:grid;
+ grid-template-columns:1.4fr .6fr;
+ gap:14px
+}
+
+.panel{
+ background:linear-gradient(180deg,#111b2c,#0c131f);
+ border:1px solid #273853;
+ border-radius:15px;
+ padding:16px;
+ margin-bottom:14px
+}
+
+.cards{
+ display:grid;
+ grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+ gap:10px
+}
+
+.card{
+ background:#111c2e;
+ border:1px solid #293b58;
+ border-radius:12px;
+ padding:13px
+}
+
+.small{
+ color:#91a0b8;
+ font-size:13px;
+ line-height:1.5
+}
+
+.row{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:8px;
+ flex-wrap:wrap
+}
+
+.tag{
+ display:inline-block;
+ padding:3px 7px;
+ border-radius:20px;
+ background:#1b2a43;
+ color:#a9d3ff;
+ font-size:11px
+}
+
+.bar{
+ height:9px;
+ background:#05090f;
+ border-radius:20px;
+ overflow:hidden;
+ margin:7px 0 12px
+}
+
+.bar i{
+ display:block;
+ height:100%;
+ background:#55d68b;
+ width:0
+}
+
+.log{
+ max-height:300px;
+ overflow:auto
+}
+
+.log div{
+ padding:8px 0;
+ border-bottom:1px solid #ffffff0b;
+ font-size:13px
+}
+
+.good{color:#67e39b}
+.bad{color:#ff7777}
+.warn{color:#ffd166}
+.news{color:#65b9ff}
+
+.console{
+ height:230px;
+ border-radius:17px;
+ border:3px solid #303d51;
+ background:linear-gradient(145deg,#252f40,#080b10);
+ display:flex;
+ justify-content:center;
+ align-items:center;
+ position:relative;
+ overflow:hidden
+}
+
+.screen{
+ width:60%;
+ height:62%;
+ background:#05080b;
+ border:5px solid #394558;
+ display:flex;
+ justify-content:center;
+ align-items:center;
+ text-align:center;
+ color:#7edcff;
+ font-weight:bold
+}
+
+.controls{
+ position:absolute;
+ bottom:18px;
+ display:flex;
+ gap:15px
+}
+
+.dpad{
+ width:55px;
+ height:30px;
+ background:#111;
+ border-radius:5px
+}
+
+.round{
+ width:32px;
+ height:32px;
+ border-radius:50%;
+ background:#a51e40
+}
+
+.modal{
+ position:fixed;
+ inset:0;
+ background:#000b;
+ display:none;
+ align-items:center;
+ justify-content:center;
+ padding:20px;
+ z-index:100
+}
+
+.modal.open{
+ display:flex
+}
+
+.modalbox{
+ max-width:650px;
+ width:100%;
+ background:#121d30;
+ border:1px solid #344968;
+ border-radius:18px;
+ padding:22px;
+ box-shadow:0 20px 60px #000
+}
+
+.bigRating{
+ font-size:60px;
+ font-weight:900
+}
+
+footer{
+ text-align:center;
+ color:#64748b;
+ padding:25px;
+ font-size:12px
+}
+
+@media(max-width:800px){
+ .grid{
+  grid-template-columns:1fr
+ }
+
+ .stat{
+  min-width:75px
+ }
+
+ .console{
+  height:190px
+ }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+<div class="top">
+
+<div>
+<h1>🎮 Console Factory</h1>
+<div class="small">
+Construye consolas desde 1972 hasta 2026
+</div>
+</div>
+
+<div class="stats">
+
+<div class="stat">
+<b id="year">1972</b>
+<span>Año</span>
+</div>
+
+<div class="stat">
+<b id="day">1/365</b>
+<span>Día</span>
+</div>
+
+<div class="stat">
+<b id="money">$10,000</b>
+<span>Dinero</span>
+</div>
+
+<div class="stat">
+<b id="fans">0</b>
+<span>Reputación</span>
+</div>
+
+<div class="stat">
+<b id="sales">0</b>
+<span>Ventas</span>
+</div>
+
+<div class="stat">
+<b id="clock">10:00</b>
+<span>Año termina en</span>
+</div>
+
+</div>
+
+</div>
+
+<div class="timeline">
+<div id="timeline"></div>
+</div>
+
+</header>
+
+<nav>
+
+<button class="active" data-tab="factory">🏭 Fábrica</button>
+<button data-tab="design">🧩 Diseño</button>
+<button data-tab="research">🔬 Investigación</button>
+<button data-tab="market">💰 Economía</button>
+<button data-tab="history">📜 Consolas</button>
+
+</nav>
+
+<main>
+
+<section id="factory" class="tab">
+
+<div class="grid">
+
+<div>
+
+<div class="panel">
+
+<h2 id="eraTitle">Primeros experimentos</h2>
+
+<p id="eraDescription" class="small"></p>
+
+<div id="tasks" class="cards"></div>
+
+</div>
+
+<div class="panel">
+
+<h2>🏗️ Línea de producción</h2>
+
+<div id="status"></div>
+
+</div>
+
+</div>
+
+<div>
+
+<div class="panel">
+
+<h3>📰 Noticias</h3>
+
+<div id="currentNews"></div>
+
+<button onclick="showNews()">
+Leer noticia del año
+</button>
+
+</div>
+
+<div class="panel">
+
+<h3>📋 Registro</h3>
+
+<div class="log" id="log"></div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<section id="design" class="tab" style="display:none">
+
+<div class="grid">
+
+<div class="panel">
+
+<h2>🧩 Diseñar consola</h2>
+
+<p class="small">
+Las tecnologías aparecen en orden cronológico.
+No puedes instalar una tecnología antes de que exista.
+Primero debes investigar y después comprarla.
+</p>
+
+<div id="components" class="cards"></div>
+
+</div>
+
+<div class="panel">
+
+<h2>🖥️ Consola</h2>
+
+<div class="console">
+
+<div class="screen" id="screenText">
+PROYECTO 01
+</div>
+
+<div class="controls">
+<div class="dpad"></div>
+<div class="round"></div>
+</div>
+
+</div>
+
+<br>
+
+<button onclick="renameConsole()">
+✏️ Cambiar nombre
+</button>
+
+<button onclick="saveGame()">
+💾 Guardar
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+
+<section id="research" class="tab" style="display:none">
+
+<div class="panel">
+
+<h2>🔬 Investigación y desarrollo</h2>
+
+<p class="small">
+Investigar cuesta dinero, pero permite desbloquear tecnologías
+que después podrás instalar en tu consola.
+</p>
+
+<div id="researchCards" class="cards"></div>
+
+</div>
+
+</section>
+
+
+<section id="market" class="tab" style="display:none">
+
+<div class="grid">
+
+<div class="panel">
+
+<h2>💰 Economía</h2>
+
+<div id="marketCards" class="cards"></div>
+
+</div>
+
+<div class="panel">
+
+<h2>📊 Finanzas</h2>
+
+<div id="economy"></div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<section id="history" class="tab" style="display:none">
+
+<div class="panel">
+
+<h2>📜 Consolas fabricadas</h2>
+
+<div id="historyList"></div>
+
+</div>
+
+</section>
+
+</main>
+
+<footer>
+Console Factory — simulación educativa de evolución tecnológica.
+</footer>
+
+
+<!-- NOTICIAS -->
+
+<div class="modal" id="newsModal">
+
+<div class="modalbox">
+
+<div id="newsContent"></div>
+
+<button onclick="closeNews()">
+Cerrar
+</button>
+
+</div>
+
+</div>
+
+
+<!-- CALIFICACIÓN -->
+
+<div class="modal" id="ratingModal">
+
+<div class="modalbox">
+
+<div id="ratingContent"></div>
+
+<button onclick="closeRating()">
+Continuar
+</button>
+
+</div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   HISTORIA CRONOLÓGICA
+========================================================= */
+
+const HISTORY=[
+
+[1972,"Primeros videojuegos domésticos",
+"Las primeras consolas domésticas convierten la electrónica y la salida de vídeo en los grandes retos."],
+
+[1973,"La electrónica se simplifica",
+"Los diseñadores buscan reducir componentes y costes."],
+
+[1974,"Más juegos con el mismo hardware",
+"Los ingenieros buscan aumentar las posibilidades de los circuitos."],
+
+[1975,"Llegan los microprocesadores",
+"Los microprocesadores permiten crear sistemas mucho más programables."],
+
+[1976,"Los chips toman protagonismo",
+"La integración electrónica cambia la manera de diseñar las consolas."],
+
+[1977,"La era de los cartuchos",
+"Los cartuchos permiten cambiar de juego sin cambiar toda la máquina."],
+
+[1978,"Más memoria",
+"Los desarrolladores necesitan más memoria para juegos más complejos."],
+
+[1979,"La batalla de los 8 bits",
+"CPU, memoria y vídeo empiezan a convertirse en el centro del diseño."],
+
+[1980,"El videojuego entra en los hogares",
+"La fabricación en volumen empieza a ser fundamental."],
+
+[1981,"Los controles evolucionan",
+"Los fabricantes experimentan con nuevas formas de interacción."],
+
+[1982,"Más color y sonido",
+"Los chips dedicados permiten experiencias audiovisuales más completas."],
+
+[1983,"Reajuste de la industria",
+"Calidad, coste y software se vuelven factores decisivos."],
+
+[1984,"Nuevos diseños",
+"Las compañías buscan arquitecturas más eficientes."],
+
+[1985,"Los 8 bits se refinan",
+"Los desarrolladores aprovechan mejor memoria, sprites y sonido."],
+
+[1986,"Herramientas de desarrollo",
+"Los kits y procesos para crear juegos empiezan a cobrar importancia."],
+
+[1987,"Más potencia",
+"La competencia tecnológica aumenta."],
+
+[1988,"Llegan los 16 bits",
+"Los nuevos procesadores permiten diseños más complejos."],
+
+[1989,"Los 16 bits despegan",
+"Gráficos, sonido y controles mejoran notablemente."],
+
+[1990,"La consola como plataforma",
+"Las compañías comienzan a construir ecosistemas completos."],
+
+[1991,"Más efectos gráficos",
+"Los chips gráficos especializados ganan importancia."],
+
+[1992,"Audio y gráficos digitales",
+"La calidad audiovisual se vuelve fundamental."],
+
+[1993,"El 3D entra en escena",
+"Las compañías comienzan a investigar aceleración 3D."],
+
+[1994,"La era del CD",
+"El almacenamiento óptico permite guardar mucha más información."],
+
+[1995,"Interfaces más completas",
+"Menús, guardado y funciones multimedia empiezan a crecer."],
+
+[1996,"El 3D se normaliza",
+"Las consolas necesitan hardware gráfico cada vez más especializado."],
+
+[1997,"Procesadores más rápidos",
+"Los mundos 3D requieren más rendimiento."],
+
+[1998,"Memoria y accesorios",
+"Los fabricantes exploran nuevas formas de ampliar las consolas."],
+
+[1999,"La siguiente generación",
+"Se preparan arquitecturas mucho más potentes."],
+
+[2000,"La era multimedia",
+"DVD, almacenamiento e interfaces pasan a formar parte del diseño."],
+
+[2001,"Conectividad",
+"Las redes empiezan a integrarse en las plataformas."],
+
+[2002,"Discos y servicios",
+"El almacenamiento y las funciones online crecen."],
+
+[2003,"Juegos conectados",
+"Los servicios online se vuelven más importantes."],
+
+[2004,"Portabilidad y sensores",
+"Los fabricantes experimentan con nuevos controles."],
+
+[2005,"Alta definición",
+"La HD cambia las necesidades de GPU y salida de vídeo."],
+
+[2006,"La consola conectada",
+"Perfiles, actualizaciones y servicios forman parte del sistema."],
+
+[2007,"Interfaces digitales",
+"Los sistemas operativos de consola reciben más funciones."],
+
+[2008,"Distribución digital",
+"Las descargas empiezan a complementar al formato físico."],
+
+[2009,"Más servicios",
+"Las actualizaciones de software se vuelven normales."],
+
+[2010,"Sensores y movimiento",
+"Los controles físicos reciben nuevas funciones."],
+
+[2011,"HD consolidada",
+"El rendimiento gráfico continúa aumentando."],
+
+[2012,"La siguiente transición",
+"Los fabricantes preparan arquitecturas modernas."],
+
+[2013,"La era moderna",
+"CPU multinúcleo, GPU potente, red y sistema operativo convergen."],
+
+[2014,"Distribución digital madura",
+"La consola se convierte también en una plataforma de servicios."],
+
+[2015,"HDR y mejores gráficos",
+"La calidad visual continúa avanzando."],
+
+[2016,"Revisiones de hardware",
+"Las compañías experimentan con revisiones y modelos mejorados."],
+
+[2017,"Portabilidad híbrida",
+"Surgen nuevas formas de jugar en casa y fuera."],
+
+[2018,"SSD y streaming",
+"La velocidad de almacenamiento gana protagonismo."],
+
+[2019,"Preparando la nueva generación",
+"SSD, CPU y GPU modernas dominan el diseño."],
+
+[2020,"Nueva generación",
+"SSD rápido y gráficos avanzados llegan al centro del diseño."],
+
+[2021,"Servicios y almacenamiento",
+"El software conectado es cada vez más importante."],
+
+[2022,"Optimización energética",
+"Consumo, temperatura y rendimiento se vuelven decisiones clave."],
+
+[2023,"Escalado gráfico",
+"Las técnicas modernas permiten mejorar imagen y rendimiento."],
+
+[2024,"Hardware eficiente",
+"Las compañías buscan más rendimiento por vatio."],
+
+[2025,"La plataforma es un ecosistema",
+"Hardware, sistema operativo y servicios deben funcionar juntos."],
+
+[2026,"La consola moderna",
+"Tu empresa llega a la era de consolas potentes, conectadas y complejas."]
+
+];
+
+
+/* =========================================================
+   TECNOLOGÍAS
+========================================================= */
+
+const TECH={
+
+cpu:[
+["Lógica discreta",1972,600,2],
+["Microprocesador 8-bit",1975,1800,6],
+["CPU 16-bit",1979,5500,11],
+["CPU 32-bit",1989,18000,18],
+["CPU 64-bit",1999,50000,27],
+["CPU multinúcleo",2005,120000,38],
+["CPU moderna",2013,350000,50]
+],
+
+gpu:[
+["Vídeo básico",1972,400,2],
+["Sprites 2D",1977,1600,6],
+["Gráficos 16-bit",1988,6500,12],
+["Aceleración 3D",1994,30000,23],
+["GPU HD",2005,130000,35],
+["GPU avanzada",2013,380000,48],
+["Ray tracing / 4K",2020,650000,62]
+],
+
+ram:[
+["2 KB",1972,250,1],
+["16 KB",1977,700,4],
+["128 KB",1983,1800,8],
+["2 MB",1993,7000,15],
+["32 MB",1998,18000,22],
+["512 MB",2005,50000,31],
+["8 GB",2013,160000,45],
+["16 GB",2020,230000,55]
+],
+
+storage:[
+["Cartucho básico",1972,300,2],
+["Cartucho ROM",1977,1300,6],
+["CD-ROM",1994,10000,16],
+["DVD",2000,22000,24],
+["Disco duro",2001,45000,31],
+["Blu-ray",2006,70000,36],
+["SSD",2013,150000,48]
+],
+
+audio:[
+["Audio básico",1972,200,2],
+["Chip multicanal",1977,900,6],
+["PCM digital",1988,7000,14],
+["Audio 3D",1995,22000,24],
+["Audio HD",2005,60000,36]
+],
+
+controls:[
+["Paddles / botones",1972,250,2],
+["Joystick",1977,600,5],
+["D-pad + botones",1983,2500,11],
+["Gamepad avanzado",1989,7000,18],
+["Analógico + vibración",1996,22000,28],
+["Inalámbrico",2005,55000,38],
+["Control moderno",2013,130000,48]
+],
+
+system:[
+["Firmware",1972,400,2],
+["Menú básico",1977,1200,5],
+["Guardado",1989,7000,13],
+["Sistema multimedia",2000,40000,25],
+["SO conectado",2006,100000,38],
+["Interfaz moderna",2013,230000,50]
+],
+
+network:[
+["Sin red",1972,0,0],
+["Módem",1985,4000,7],
+["Ethernet",1995,14000,17],
+["Wi-Fi",2002,50000,28],
+["Servicios online",2006,140000,40],
+["Red moderna",2013,280000,50]
+]
+
+};
+
+const NAMES={
+cpu:["CPU","Procesador principal"],
+gpu:["GPU","Gráficos"],
+ram:["RAM","Memoria"],
+storage:["Almacenamiento","Cartuchos, discos o memoria"],
+audio:["Audio","Sistema de sonido"],
+controls:["Controles","Entrada del jugador"],
+system:["Sistema","Firmware y sistema operativo"],
+network:["Red","Conectividad"]
+};
+
+
+/* =========================================================
+   ERAS
+========================================================= */
+
+const ERAS=[
+
+[1972,1974,"Primeros experimentos",9000],
+[1975,1977,"Microprocesadores",14000],
+[1978,1982,"8 bits",25000],
+[1983,1988,"16 bits",55000],
+[1989,1994,"Era 3D",120000],
+[1995,2000,"Multimedia",250000],
+[2001,2006,"Online",500000],
+[2007,2013,"HD",900000],
+[2014,2019,"4K y servicios",1800000],
+[2020,2026,"Generación moderna",3500000]
+
+];
+
+
+/* =========================================================
+   ESTADO DEL JUEGO
+========================================================= */
+
+let game={
+
+year:1972,
+day:1,
+
+money:10000,
+
+reputation:0,
+
+research:[],
+
+levels:{
+ cpu:0,
+ gpu:0,
+ ram:0,
+ storage:0,
+ audio:0,
+ controls:0,
+ system:0,
+ network:0
+},
+
+design:{
+ name:"Proyecto 01",
+ progress:0,
+ tests:0
+},
+
+sales:0,
+
+revenue:0,
+
+expenses:0,
+
+consoles:[]
+
+};
+
+
+/* =========================================================
+   UTILIDADES
+========================================================= */
+
+const $=id=>document.getElementById(id);
+
+function money(n){
+ return "$"+Math.round(n).toLocaleString("en-US");
+}
+
+function clamp(n,a,b){
+ return Math.max(a,Math.min(b,n));
+}
+
+function era(){
+
+ return ERAS.find(
+  x=>game.year>=x[0] &&
+     game.year<=x[1]
+ ) || ERAS[ERAS.length-1];
+
+}
+
+function quality(){
+
+ let q=0;
+
+ for(let k in game.levels){
+
+  q+=(game.levels[k]+1)*3;
+
+ }
+
+ q+=game.design.tests*5;
+
+ q+=Math.floor(game.reputation/4);
+
+ return q;
+
+}
+
+function target(){
+
+ return 28+
+ Math.floor(
+  (game.year-1972)/2.1
+ );
+
+}
+
+function dailyCost(){
+
+ return Math.max(
+  2,
+  Math.round(
+   era()[3]/18000
+  )
+ );
+}
+
+function researched(k,i){
+
+ return i===0 ||
+ game.research.includes(
+  k+"-"+i
+ );
+
+}
+
+
+/* =========================================================
+   LOG
+========================================================= */
+
+function log(message,type=""){
+
+ $("log").innerHTML=
+ `<div class="${type}">
+ Día ${game.day} · ${game.year}: ${message}
+ </div>`+
+ $("log").innerHTML;
+
+}
+
+
+/* =========================================================
+   GUARDADO
+========================================================= */
+
+function saveGame(){
+
+ localStorage.setItem(
+  "consoleFactorySave",
+  JSON.stringify(game)
+ );
+
+ log(
+  "Partida guardada correctamente.",
+  "good"
+ );
+
+}
+
+function loadGame(){
+
+ try{
+
+  const data=
+   localStorage.getItem(
+    "consoleFactorySave"
+   );
+
+  if(data){
+
+   game=
+    Object.assign(
+     game,
+     JSON.parse(data)
+    );
+
+  }
+
+ }catch(error){
+
+  console.log(
+   "Save corrupto, comenzando partida limpia."
+  );
+
+ }
+
+}
+
+
+/* =========================================================
+   RENOMBRAR
+========================================================= */
+
+function renameConsole(){
+
+ const name=
+  prompt(
+   "Nombre de la consola:",
+   game.design.name
+  );
+
+ if(
+  name &&
+  name.trim()
+ ){
+
+  game.design.name=
+   name.trim().substring(0,32);
+
+  render();
+
+ }
+
+}
+
+
+/* =========================================================
+   PASAR DÍA
+========================================================= */
+
+function nextDay(){
+
+ if(
+  game.year===2026 &&
+  game.day===365
+ ){
+
+  return;
+
+ }
+
+ game.day++;
+
+ const cost=dailyCost();
+
+ game.money-=cost;
+
+ game.expenses+=cost;
+
+
+ /* Coste mensual */
+
+ if(
+  game.day%30===0
+ ){
+
+  const monthly=
+   Math.round(
+    era()[3]*0.02
+   );
+
+  game.money-=monthly;
+
+  game.expenses+=monthly;
+
+  log(
+   "Costes mensuales de laboratorio: "+
+   money(monthly),
+   "warn"
+  );
+
+ }
+
+
+ /* Año nuevo */
+
+ if(
+  game.day>=365
+ ){
+
+  game.day=1;
+
+  if(
+   game.year<2026
+  ){
+
+   game.year++;
+
+   const income=
+    Math.round(
+     1000+
+     game.reputation*60+
+     game.sales*15
+    );
+
+   game.money+=income;
+
+   game.revenue+=income;
+
+   game.design.progress=0;
+
+   game.design.tests=0;
+
+   const news=
+    HISTORY.find(
+     x=>x[0]===game.year
+    );
+
+   if(news){
+
+    log(
+     "📰 "+
+     news[1]+
+     " — "+
+     news[2],
+     "news"
+    );
+
+   }
+
+  }
+
+ }
+
+ render();
+
+}
+
+
+/* =========================================================
+   NOTICIAS
+========================================================= */
+
+function showNews(){
+
+ const news=
+  HISTORY.find(
+   x=>x[0]===game.year
+  );
+
+ $("newsContent").innerHTML=`
+
+ <h2>📰 Noticias de ${game.year}</h2>
+
+ <h3>${news[1]}</h3>
+
+ <p>
+ ${news[2]}
+ </p>
+
+ <p class="small">
+ Contexto histórico utilizado por el simulador.
+ </p>
+
+ `;
+
+ $("newsModal")
+  .classList.add("open");
+
+}
+
+function closeNews(){
+
+ $("newsModal")
+  .classList.remove("open");
+
+}
+
+
+/* =========================================================
+   INVESTIGAR
+========================================================= */
+
+function research(k,i){
+
+ const tech=
+  TECH[k][i];
+
+ const cost=
+  Math.max(
+   150,
+   Math.round(
+    tech[2]*0.25
+   )
+  );
+
+ if(
+  game.year<
+  tech[1]
+ ){
+
+  alert(
+   "Esta tecnología todavía no existe."
+  );
+
+  return;
+
+ }
+
+ if(
+  researched(k,i)
+ ){
+
+  return;
+
+ }
+
+ if(
+  game.money<
+  cost
+ ){
+
+  alert(
+   "Necesitas "+
+   money(cost)
+  );
+
+  return;
+
+ }
+
+ game.money-=cost;
+
+ game.expenses+=cost;
+
+ game.research.push(
+  k+"-"+i
+ );
+
+ log(
+  "🔬 Investigación terminada: "+
+  tech[0]+
+  ". Coste "+
+  money(cost)+".",
+  "good"
+ );
+
+ render();
+
+}
+
+
+/* =========================================================
+   INSTALAR
+========================================================= */
+
+function install(k,i){
+
+ const tech=
+  TECH[k][i];
+
+ if(
+  game.year<
+  tech[1]
+ ){
+
+  alert(
+   "Todavía no estamos en "+
+   tech[1]+"."
+  );
+
+  return;
+
+ }
+
+ if(
+  !researched(k,i)
+ ){
+
+  alert(
+   "Primero investiga esta tecnología."
+  );
+
+  return;
+
+ }
+
+ if(
+  i<=game.levels[k]
+ ){
+
+  return;
+
+ }
+
+ if(
+  i!==game.levels[k]+1
+ ){
+
+  alert(
+   "Debes instalar las tecnologías de "+
+   NAMES[k][0]+
+   " en orden."
+  );
+
+  return;
+
+ }
+
+ if(
+  game.money<
+  tech[2]
+ ){
+
+  alert(
+   "Capital insuficiente."
+  );
+
+  return;
+
+ }
+
+ game.money-=tech[2];
+
+ game.expenses+=tech[2];
+
+ game.levels[k]=i;
+
+ log(
+  "⚙️ Instalado "+
+  tech[0]+
+  ". Coste "+
+  money(tech[2])+".",
+  "good"
+ );
+
+ render();
+
+}
+
+
+/* =========================================================
+   CONSTRUIR
+========================================================= */
+
+function buildPrototype(){
+
+ const cost=
+  Math.round(
+   era()[3]*0.12
+  );
+
+ if(
+  game.money<
+  cost
+ ){
+
+  alert(
+   "No tienes suficiente dinero."
+  );
+
+  return;
+
+ }
+
+ if(
+  quality()<
+  target()-12
+ ){
+
+  alert(
+   "Tu arquitectura todavía está demasiado incompleta."
+  );
+
+  return;
+
+ }
+
+ game.money-=cost;
+
+ game.expenses+=cost;
+
+ game.design.progress=
+  clamp(
+   game.design.progress+25,
+   0,
+   100
+  );
+
+ log(
+  "🏗️ Prototipo construido por "+
+  money(cost)+
+  ". Avance: "+
+  game.design.progress+"%.",
+  "good"
+ );
+
+ render();
+
+}
+
+
+/* =========================================================
+   PRUEBAS
+========================================================= */
+
+function testPrototype(){
+
+ if(
+  game.design.progress<75
+ ){
+
+  alert(
+   "El prototipo necesita al menos 75%."
+  );
+
+  return;
+
+ }
+
+ const cost=
+  Math.round(
+   era()[3]*0.045
+  );
+
+ if(
+  game.money<
+  cost
+ ){
+
+  alert(
+   "No puedes pagar las pruebas."
+  );
+
+  return;
+
+ }
+
+ game.money-=cost;
+
+ game.expenses+=cost;
+
+ const roll=
+  quality()+
+  Math.floor(
+   Math.random()*16
+  );
+
+ if(
+  roll>=target()
+ ){
+
+  game.design.tests++;
+
+  game.reputation+=3;
+
+  log(
+   "🧪 PRUEBAS SUPERADAS "+
+   "("+roll+"/"+target()+")",
+   "good"
+  );
+
+ }else{
+
+  game.design.progress=
+   clamp(
+    game.design.progress-12,
+    0,
+    100
+   );
+
+  game.reputation=
+   Math.max(
+    0,
+    game.reputation-1
+   );
+
+  log(
+   "❌ FALLO DE PRUEBAS "+
+   "("+roll+"/"+target()+"). "+
+   "El prototipo vuelve a ingeniería.",
+   "bad"
+  );
+
+ }
+
+ render();
+
+}
+
+
+/* =========================================================
+   CALIFICACIÓN
+========================================================= */
+
+function rating(){
+
+ const q=quality();
+
+ const t=target();
+
+ const technical=
+  clamp(
+   Math.round(
+    q/t*55
+   ),
+   0,
+   55
+  );
+
+ const components=
+  Math.min(
+   25,
+   Object.values(
+    game.levels
+   ).filter(
+    x=>x>0
+   ).length*3
+  );
+
+ const testing=
+  game.design.tests
+  ?15
+  :0;
+
+ return clamp(
+  Math.round(
+   technical+
+   components+
+   testing+
+   5
+  ),
+  1,
+  100
+ );
+
+}
+
+
+/* =========================================================
+   FABRICAR Y VENDER
+========================================================= */
+
+function manufacture(){
+
+ if(
+  game.design.progress<100
+ ){
+
+  alert(
+   "Completa el prototipo al 100%."
+  );
+
+  return;
+
+ }
+
+ if(
+  !game.design.tests
+ ){
+
+  alert(
+   "Primero debes superar las pruebas."
+  );
+
+  return;
+
+ }
+
+ const cost=
+  Math.round(
+   era()[3]*0.18
+  );
+
+ const revenue=
+  Math.round(
+   cost*
+   (
+    1.35+
+    Math.min(
+     1,
+     game.reputation/100
+    )
+   )
+  );
+
+ if(
+  game.money<
+  cost
+ ){
+
+  alert(
+   "No puedes financiar el lote."
+  );
+
+  return;
+
+ }
+
+ game.money-=cost;
+
+ game.expenses+=cost;
+
+ game.money+=revenue;
+
+ game.revenue+=revenue;
+
+ game.sales++;
+
+ const score=
+  rating();
+
+ game.reputation+=
+  Math.max(
+   1,
+   Math.round(score/20)
+  );
+
+ const consoleData={
+
+  year:game.year,
+
+  day:game.day,
+
+  name:game.design.name,
+
+  rating:score,
+
+  quality:quality(),
+
+  cost:cost,
+
+  revenue:revenue
+
+ };
+
+ game.consoles.unshift(
+  consoleData
+ );
+
+ log(
+  "🎉 "+
+  game.design.name+
+  " lanzada. "+
+  "Producción: "+
+  money(cost)+
+  " · Ingresos: "+
+  money(revenue)+
+  " · Nota: "+
+  score+
+  "/100",
+  "good"
+ );
+
+ showRating(
+  consoleData
+ );
+
+ game.design.progress=0;
+
+ game.design.tests=0;
+
+ game.design.name=
+  "Proyecto "+
+  String(
+   game.sales+1
+  ).padStart(
+   2,
+   "0"
+  );
+
+ render();
+
+}
+
+
+/* =========================================================
+   MOSTRAR NOTA
+========================================================= */
+
+function showRating(c){
+
+ let text;
+
+ if(
+  c.rating>=90
+ ){
+
+  text=
+   "Producto excepcional";
+
+ }else if(
+  c.rating>=75
+ ){
+
+  text=
+   "Muy sólido";
+
+ }else if(
+  c.rating>=60
+ ){
+
+  text=
+   "Correcto, pero mejorable";
+
+ }else{
+
+  text=
+   "Necesita bastante trabajo";
+
+ }
+
+ $("ratingContent").innerHTML=`
+
+ <h2>⭐ Evaluación de ${c.name}</h2>
+
+ <div class="bigRating">
+ ${c.rating}/100
+ </div>
+
+ <h3>${text}</h3>
+
+ <p>
+ <b>Año:</b>
+ ${c.year}
+ </p>
+
+ <p>
+ <b>Día:</b>
+ ${c.day}
+ </p>
+
+ <p>
+ <b>Calidad técnica:</b>
+ ${c.quality}
+ </p>
+
+ <p>
+ <b>Coste:</b>
+ ${money(c.cost)}
+ </p>
+
+ <p>
+ <b>Ingresos:</b>
+ ${money(c.revenue)}
+ </p>
+
+ <p class="small">
+ La nota combina tecnología instalada,
+ completitud del diseño y resultados
+ de las pruebas.
+ </p>
+
+ `;
+
+ $("ratingModal")
+  .classList.add("open");
+
+}
+
+function closeRating(){
+
+ $("ratingModal")
+  .classList.remove("open");
+
+}
+
+
+/* =========================================================
+   RENDER
+========================================================= */
+
+function render(){
+
+ $("year").textContent=
+  game.year;
+
+ $("day").textContent=
+  game.day+"/365";
+
+ $("money").textContent=
+  money(game.money);
+
+ $("fans").textContent=
+  game.reputation;
+
+ $("sales").textContent=
+  game.sales;
+
+ $("timeline").style.width=
+  (
+   (game.year-1972)/54*100
+  )+"%";
+
+
+ $("eraTitle").textContent=
+  era()[2];
+
+ const news=
+  HISTORY.find(
+   x=>x[0]===game.year
+  );
+
+ $("eraDescription").textContent=
+  news[2];
+
+ $("currentNews").innerHTML=`
+
+ <b>${news[1]}</b>
+
+ <p class="small">
+ ${news[2]}
+ </p>
+
+ `;
+
+
+ const q=
+  quality();
+
+ const t=
+  target();
+
+
+ $("status").innerHTML=`
+
+ <div class="row">
+ <span>Consola</span>
+ <b>${game.design.name}</b>
+ </div>
+
+ <div class="row">
+ <span>Prototipo</span>
+ <b>${game.design.progress}%</b>
+ </div>
+
+ <div class="bar">
+ <i style="width:${game.design.progress}%"></i>
+ </div>
+
+ <div class="row">
+ <span>Calidad técnica</span>
+ <b>${q}</b>
+ </div>
+
+ <div class="row">
+ <span>Objetivo del año</span>
+ <b>${t}</b>
+ </div>
+
+ <div class="bar">
+ <i style="width:${clamp(q/t*100,0,100)}%"></i>
+ </div>
+
+ <br>
+
+ <button onclick="buildPrototype()">
+ 🔧 Construir prototipo
+ </button>
+
+ <button onclick="testPrototype()">
+ 🧪 Probar consola
+ </button>
+
+ <button onclick="manufacture()">
+ 🏭 Fabricar y vender
+ </button>
+
+ <button onclick="showNews()">
+ 📰 Noticias
+ </button>
+
+ <button onclick="nextDay()">
+ 📅 Siguiente día
+ </button>
+
+ <button onclick="saveGame()">
+ 💾 Guardar
+ </button>
+
+ <button onclick="resetGame()">
+ 🗑️ Reiniciar
+ </button>
+
+ `;
+
+
+ /* COMPONENTES */
+
+ $("components").innerHTML="";
+
+ for(
+  const k in TECH
+ ){
+
+  let html=`
+
+  <div class="card">
+
+  <h3>
+  ${NAMES[k][0]}
+  </h3>
+
+  <p class="small">
+  ${NAMES[k][1]}
+  </p>
+
+  `;
+
+  TECH[k].forEach(
+   (tech,i)=>{
+
+    const active=
+     game.levels[k]===i;
+
+    const owned=
+     game.levels[k]>i;
+
+    const available=
+     game.year>=tech[1];
+
+    html+=`
+
+    <div style="
+     margin:7px 0;
+     padding:8px;
+     border:1px solid
+     ${active?
+     "#58a6ff":
+     "#ffffff0b"};
+     border-radius:9px
+    ">
+
+    <div class="row">
+
+    <b>
+    ${tech[0]}
+    </b>
+
+    <span class="tag">
+    ${tech[1]}
+    </span>
+
+    </div>
+
+    <div class="small">
+
+    I+D:
+    ${money(
+     Math.max(
+      150,
+      Math.round(
+       tech[2]*.25
+      )
+     )
+    )}
+
+    · Hardware:
+    ${money(tech[2])}
+
+    </div>
+
+    <button
+
+    ${
+     active||
+     owned||
+     !available||
+     !researched(k,i)
+     ?"disabled":""
+    }
+
+    onclick="
+    install('${k}',${i})
+    ">
+
+    ${
+     active
+     ?"ACTIVO"
+     :
+     owned
+     ?"SUPERADO"
+     :
+     !available
+     ?"AÚN NO EXISTE"
+     :
+     !researched(k,i)
+     ?"INVESTIGA PRIMERO"
+     :
+     "INSTALAR"
+    }
+
+    </button>
+
+    </div>
+
+    `;
+
+   }
+  );
+
+  html+=
+   "</div>";
+
+  $("components").innerHTML+=
+   html;
+
+ }
+
+
+ /* INVESTIGACIÓN */
+
+ $("researchCards").innerHTML="";
+
+ for(
+  const k in TECH
+ ){
+
+  TECH[k].forEach(
+   (tech,i)=>{
+
+    if(i===0)return;
+
+    const cost=
+     Math.max(
+      150,
+      Math.round(
+       tech[2]*.25
+      )
+     );
+
+    const done=
+     researched(k,i);
+
+    const available=
+     game.year>=tech[1];
+
+    $("researchCards").innerHTML+=`
+
+    <div class="card">
+
+    <h3>
+    🔬 ${tech[0]}
+    </h3>
+
+    <p class="small">
+    ${NAMES[k][0]}
+    · Disponible en ${tech[1]}
+    </p>
+
+    <b>
+    ${money(cost)}
+    </b>
+
+    <br>
+
+    <button
+
+    ${
+     done||
+     !available
+     ?"disabled":""
+    }
+
+    onclick="
+    research('${k}',${i})
+    ">
+
+    ${
+     done
+     ?"✓ INVESTIGADO"
+     :
+     !available
+     ?"🔒 BLOQUEADO"
+     :
+     "INVESTIGAR"
+    }
+
+    </button>
+
+    </div>
+
+    `;
+
+   }
+  );
+
+ }
+
+
+ /* ECONOMÍA */
+
+ $("marketCards").innerHTML=`
+
+ <div class="card">
+
+ <h3>💰 Dinero</h3>
+
+ <b>
+ ${money(game.money)}
+ </b>
+
+ <p class="small">
+ Coste diario:
+ ${money(dailyCost())}
+ </p>
+
+ </div>
+
+
+ <div class="card">
+
+ <h3>📈 Reputación</h3>
+
+ <b>
+ ${game.reputation}
+ </b>
+
+ </div>
+
+
+ <div class="card">
+
+ <h3>🏭 Ventas</h3>
+
+ <b>
+ ${game.sales}
+ </b>
+
+ </div>
+
+ `;
+
+
+ $("economy").innerHTML=`
+
+ <p>
+ <b>Ingresos:</b>
+ ${money(game.revenue)}
+ </p>
+
+ <p>
+ <b>Gastos:</b>
+ ${money(game.expenses)}
+ </p>
+
+ <p>
+ <b>Balance:</b>
+ ${money(
+  game.revenue-
+  game.expenses
+ )}
+ </p>
+
+ `;
+
+
+ /* HISTORIAL */
+
+ if(
+  game.consoles.length
+ ){
+
+  $("historyList").innerHTML=
+   game.consoles.map(
+    c=>`
+
+    <div class="card"
+    style="margin-bottom:8px">
+
+    <div class="row">
+
+    <b>
+    ${c.year}
+    · Día ${c.day}
+    · ${c.name}
+    </b>
+
+    <b>
+    ⭐ ${c.rating}/100
+    </b>
+
+    </div>
+
+    <p class="small">
+
+    Calidad:
+    ${c.quality}
+
+    · Producción:
+    ${money(c.cost)}
+
+    · Ingresos:
+    ${money(c.revenue)}
+
+    </p>
+
+    </div>
+
+    `
+   ).join("");
+
+ }else{
+
+  $("historyList").innerHTML=
+   `<p class="small">
+   Todavía no has fabricado ninguna consola.
+   </p>`;
+
+ }
+
+
+ $("screenText").textContent=
+  game.design.name;
+
+}
+
+
+/* =========================================================
+   TABS
+========================================================= */
+
+document
+.querySelectorAll(".tabs button")
+.forEach(
+ button=>{
+
+  button.onclick=()=>{
+
+   document
+   .querySelectorAll(".tabs button")
+   .forEach(
+    b=>b.classList.remove("active")
+   );
+
+   button.classList.add("active");
+
+   document
+   .querySelectorAll(".tab")
+   .forEach(
+    tab=>tab.style.display="none"
+   );
+
+   $(
+    button.dataset.tab
+   ).style.display="block";
+
+  };
+
+ }
+);
+
+
+/* =========================================================
+   INICIO
+========================================================= */
+
+loadGame();
+
+render();
+
+log(
+ "🏢 Compañía fundada en 1972 con $10,000.",
+ "good"
+);
+
+
+/*
+  EXACTAMENTE 10 MINUTOS = 1 AÑO
+
+  10 minutos = 600 segundos
+  365 días
+  600 / 365 segundos por día
+*/
+
+setInterval(
+ nextDay,
+ Math.round(
+  600000/365
+ )
+);
+
+
+/*
+  Guardado automático
+*/
+
+setInterval(
+ ()=>{
+  localStorage.setItem(
+   "consoleFactorySave",
+   JSON.stringify(game)
+  );
+ },
+ 20000
+);
+
+</script>
+
+</body>
+</html>
